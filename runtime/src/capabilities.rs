@@ -74,7 +74,7 @@ impl SendCap for Tag {}
 ///
 /// The type system enforces that only `Iso` and `Val` capabilities
 /// can be sent across threads.
-#[derive(Debug)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Tracked<T, Cap: RefCap> {
     data: T,
     _cap: PhantomData<Cap>,

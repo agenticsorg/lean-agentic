@@ -154,7 +154,7 @@ impl<T: Send> Clone for Mailbox<T> {
 }
 
 /// Mailbox sender handle
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct MailboxSender<T: Send> {
     tx: Sender<Message<T>>,
     config: MailboxConfig,

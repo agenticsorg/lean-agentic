@@ -48,8 +48,8 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 # Time utilities
 quanta = "0.12"
 
-# SIMD optimizations (for future use)
-portable-simd = { version = "0.3", optional = true }
+# SIMD optimizations (requires nightly, disabled for stable builds)
+# portable-simd = { version = "0.3", optional = true }
 
 [dev-dependencies]
 criterion = { version = "0.5", features = ["html_reports", "async_tokio"] }
@@ -58,7 +58,7 @@ tokio-test = "0.4"
 
 [features]
 default = []
-simd = ["portable-simd"]
+# simd = ["portable-simd"]
 
 [[bench]]
 name = "scheduler"

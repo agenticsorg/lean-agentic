@@ -142,7 +142,7 @@ impl<'a> Normalizer<'a> {
     }
 
     /// Substitute term for variable at given de Bruijn index
-    fn substitute(&self, term: TermId, var_idx: u32, replacement: TermId, ctx: &Context) -> Result<TermId> {
+    fn substitute(&mut self, term: TermId, var_idx: u32, replacement: TermId, ctx: &Context) -> Result<TermId> {
         let term_data = self.arena.get_term(term)
             .ok_or_else(|| EvalError::InvalidReduction("Invalid term in substitution".to_string()))?;
 
@@ -189,7 +189,7 @@ impl<'a> Normalizer<'a> {
     }
 
     /// Shift indices above cutoff
-    fn shift_above(&self, term: TermId, cutoff: u32, amount: i32) -> Result<TermId> {
+    fn shift_above(&mut self, term: TermId, cutoff: u32, amount: i32) -> Result<TermId> {
         let term_data = self.arena.get_term(term)
             .ok_or_else(|| EvalError::InvalidReduction("Invalid term in shift".to_string()))?;
 
