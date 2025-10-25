@@ -2,7 +2,7 @@
 //!
 //! Automatically inserts metavariables for implicit parameters.
 
-use leanr_core::{Arena, TermId, term::{BinderInfo, MetaVarId}};
+use lean_agentic::{Arena, TermId, term::{BinderInfo, MetaVarId}};
 use crate::metavar::MetaVarContext;
 use crate::ElabResult;
 

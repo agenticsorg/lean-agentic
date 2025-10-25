@@ -15,7 +15,7 @@ pub use elaborate::{Elaborator, ElabError, ElabResult};
 pub use context::ElabContext;
 pub use metavar::MetaVarContext;
 
-use leanr_core::{Arena, Environment, Term, TermId, TermKind};
+use lean_agentic::{Arena, Environment, Term, TermId, TermKind};
 use leanr_syntax::{Expr, Decl};
 
 /// Main elaboration entry point

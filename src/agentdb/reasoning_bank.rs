@@ -124,8 +124,10 @@ impl ReasoningBank {
 
             // Distill successful patterns
             if verdict.success && verdict.score > 0.8 {
+                // Clone trajectory before releasing lock to avoid borrow issues
+                let trajectory_clone = trajectory.clone();
                 drop(trajectories); // Release lock before distillation
-                self.distill_pattern(trajectory).await?;
+                self.distill_pattern(&trajectory_clone).await?;
             }
         }
 

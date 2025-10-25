@@ -11,6 +11,6 @@ pub mod multi_lane;
 
 // Re-exports for convenience
 pub use agentdb::{AgentDb, AgentDbConfig, Episode, SemanticFact};
-pub use llm_compiler::{LlmCompiler, LlmCompilerConfig};
-pub use jit_runtime::{JitRuntime, JitRuntimeConfig, JitTier};
-pub use multi_lane::{LaneRouter, LaneRouterConfig, Provider, InferenceRequest};
+pub use llm_compiler::LlmCompiler;
+pub use jit_runtime::JitRuntime;
+pub use multi_lane::MultiLane;

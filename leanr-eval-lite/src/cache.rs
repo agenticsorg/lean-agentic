@@ -1,7 +1,7 @@
 //! Memoization cache for WHNF normalization
 
 use hashbrown::HashMap;
-use leanr_core::TermId;
+use lean_agentic::TermId;
 use rustc_hash::FxHasher;
 use std::hash::BuildHasherDefault;
 

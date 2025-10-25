@@ -7,7 +7,7 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
-leanr-core = { path = "../leanr-core" }
+lean-agentic = { version = "0.1.0", path = "../lean-agentic" }
 hashbrown.workspace = true
 rustc-hash.workspace = true
 thiserror.workspace = true
@@ -15,7 +15,7 @@ serde = { workspace = true, optional = true }
 
 [features]
 default = []
-serde = ["dep:serde", "leanr-core/serde"]
+serde = ["dep:serde", "lean-agentic/serde"]
 deterministic = []
 
 [dev-dependencies]

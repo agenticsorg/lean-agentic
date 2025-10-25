@@ -5,7 +5,7 @@ mod tests {
     use leanr_syntax::{Lexer, Parser};
     use leanr_syntax::span::SourceFile;
     use leanr_elab::elaborate_decl;
-    use leanr_core::{Arena, Environment};
+    use lean_agentic::{Arena, Environment};
 
     fn setup() -> (Arena, Environment) {
         (Arena::new(), Environment::new())

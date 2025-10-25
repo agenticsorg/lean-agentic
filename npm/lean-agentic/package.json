@@ -1,0 +1,127 @@
+{
+  "name": "lean-agentic",
+  "version": "0.2.3",
+  "description": "High-performance WebAssembly theorem prover with dependent types, hash-consing (150x faster), MCP support for Claude Code, AgentDB vector search, episodic memory, and ReasoningBank learning. Formal verification with AI-powered proof recommendations.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "lean-agentic": "cli/index.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./web": {
+      "types": "./dist/web.d.ts",
+      "import": "./dist/web.mjs"
+    },
+    "./node": {
+      "types": "./dist/node.d.ts",
+      "import": "./dist/node.mjs",
+      "require": "./dist/node.js"
+    }
+  },
+  "files": [
+    "dist",
+    "cli",
+    "src",
+    "wasm",
+    "wasm-node",
+    "wasm-web",
+    "mcp",
+    "examples",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "npm run build:wasm && npm run build:js",
+    "build:wasm": "cd ../../leanr-wasm && wasm-pack build --target bundler --out-dir ../npm/lean-agentic/wasm",
+    "build:js": "node scripts/build.js",
+    "prepublishOnly": "npm run build",
+    "test": "node --test",
+    "example:node": "node examples/node-example.js",
+    "example:web": "npx serve examples"
+  },
+  "keywords": [
+    "lean",
+    "theorem-prover",
+    "dependent-types",
+    "formal-verification",
+    "wasm",
+    "webassembly",
+    "hash-consing",
+    "type-theory",
+    "proof-assistant",
+    "lean4",
+    "type-checker",
+    "lambda-calculus",
+    "curry-howard",
+    "propositions-as-types",
+    "model-context-protocol",
+    "mcp",
+    "mcp-server",
+    "claude-code",
+    "ai-assistant",
+    "llm-tools",
+    "arena-allocation",
+    "zero-copy",
+    "performance",
+    "typescript",
+    "browser",
+    "nodejs",
+    "cli-tool",
+    "formal-methods",
+    "verification",
+    "correctness",
+    "de-bruijn",
+    "term-rewriting",
+    "agentdb",
+    "vector-search",
+    "vector-database",
+    "episodic-memory",
+    "reasoning-bank",
+    "proof-learning",
+    "semantic-search",
+    "pattern-recognition",
+    "proof-recommendations",
+    "ai-learning"
+  ],
+  "author": "ruv.io",
+  "contributors": [
+    "ruv.io",
+    "github.com/ruvnet"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agenticsorg/lean-agentic.git",
+    "directory": "npm/lean-agentic"
+  },
+  "homepage": "https://ruv.io",
+  "bugs": {
+    "url": "https://github.com/agenticsorg/lean-agentic/issues"
+  },
+  "dependencies": {
+    "commander": "^12.0.0",
+    "agentdb": "^1.5.5"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/sponsors/ruvnet"
+  },
+  "sideEffects": false,
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ]
+}

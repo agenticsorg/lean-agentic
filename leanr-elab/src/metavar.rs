@@ -1,6 +1,6 @@
 //! Metavariable context - manages unresolved holes and constraints
 
-use leanr_core::{TermId, term::MetaVarId};
+use lean_agentic::{TermId, term::MetaVarId};
 use std::collections::HashMap;
 
 /// Information about a metavariable
@@ -106,7 +106,7 @@ impl Default for MetaVarContext {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use leanr_core::term::TermId;
+    use lean_agentic::term::TermId;
 
     #[test]
     fn test_fresh_mvar() {

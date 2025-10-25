@@ -7,8 +7,8 @@
 //!
 //! Run: cargo run --example 01_hello_world
 
-use leanr_core::{Arena, Environment, SymbolTable};
-use leanr_core::level::LevelArena;
+use lean_agentic::{Arena, Environment, SymbolTable};
+use lean_agentic::level::LevelArena;
 use std::time::Instant;
 
 fn main() {
@@ -68,7 +68,7 @@ fn main() {
     println!("\n🏗️  Part 4: Lambda Abstraction");
     println!("──────────────────────────────");
 
-    use leanr_core::term::{Binder, BinderInfo};
+    use lean_agentic::term::{Binder, BinderInfo};
 
     // Create identity function: λx:Type. x
     let x_name = symbols.intern("x");

@@ -3,9 +3,9 @@
 //! Demonstrates hash-consing, type checking, and formal verification
 //! working in the browser via WebAssembly.
 
-use leanr_core::{Arena, Environment, SymbolTable};
-use leanr_core::level::LevelArena;
-use leanr_core::term::{Binder, BinderInfo};
+use lean_agentic::{Arena, Environment, SymbolTable};
+use lean_agentic::level::LevelArena;
+use lean_agentic::term::{Binder, BinderInfo};
 use wasm_bindgen::prelude::*;
 use web_sys::console;
 

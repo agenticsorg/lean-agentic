@@ -2,7 +2,7 @@
 resolver = "2"
 members = [
     "leanr-syntax",
-    "leanr-core",
+    "lean-agentic",  # Core library (formerly leanr-core)
     "leanr-elab",
     "leanr-inductive",
     "leanr-eval-lite",
@@ -15,9 +15,13 @@ members = [
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
-authors = ["Lean Rust Team"]
+authors = ["ruv.io", "github.com/ruvnet"]
 license = "Apache-2.0"
 repository = "https://github.com/agenticsorg/lean-agentic"
+homepage = "https://ruv.io"
+documentation = "https://docs.rs/lean-agentic"
+keywords = ["lean", "theorem-prover", "dependent-types", "formal-verification", "agentic"]
+categories = ["development-tools", "mathematics", "wasm"]
 
 [workspace.dependencies]
 # Shared dependencies across all crates
@@ -40,12 +44,18 @@ web-sys = "0.3"
 console_error_panic_hook = "0.1"
 
 [package]
-name = "lean-agentic"
+name = "leanr"
+description = "Lean Rust: Formally verified agentic programming language with dependent types and actor runtime"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
 repository.workspace = true
+homepage.workspace = true
+documentation = "https://docs.rs/leanr"
+keywords.workspace = true
+categories.workspace = true
+readme = "README.md"
 
 [dependencies]
 serde = { workspace = true }

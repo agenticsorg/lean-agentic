@@ -521,12 +521,14 @@ impl Parser {
 
         match &token.kind {
             TokenKind::Ident(name) => {
+                let name = name.clone();
                 let span = token.span;
                 self.advance();
-                Ok(Expr::Ident(Ident::new(name.clone(), span)))
+                Ok(Expr::Ident(Ident::new(name, span)))
             }
 
             TokenKind::Number(n) => {
+                let n = n.clone();
                 let span = token.span;
                 self.advance();
                 let num = n.parse::<u64>().map_err(|_| {
@@ -539,11 +541,12 @@ impl Parser {
             }
 
             TokenKind::String(s) => {
+                let s = s.clone();
                 let span = token.span;
                 self.advance();
                 Ok(Expr::Lit(LitExpr {
                     span,
-                    kind: LitKind::String(s.clone()),
+                    kind: LitKind::String(s),
                 }))
             }
 
@@ -600,6 +603,7 @@ impl Parser {
             }
 
             TokenKind::Number(n) => {
+                let n = n.clone();
                 let span = token.span;
                 self.advance();
                 let num = n.parse::<u64>().map_err(|_| {

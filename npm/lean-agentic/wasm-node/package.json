@@ -1,0 +1,29 @@
+{
+  "name": "leanr-wasm",
+  "collaborators": [
+    "ruv.io",
+    "github.com/ruvnet"
+  ],
+  "description": "WebAssembly bindings for lean-agentic: hash-consed dependent types in the browser",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agenticsorg/lean-agentic"
+  },
+  "files": [
+    "leanr_wasm_bg.wasm",
+    "leanr_wasm.js",
+    "leanr_wasm.d.ts"
+  ],
+  "main": "leanr_wasm.js",
+  "homepage": "https://ruv.io",
+  "types": "leanr_wasm.d.ts",
+  "keywords": [
+    "lean",
+    "theorem-prover",
+    "dependent-types",
+    "formal-verification",
+    "agentic"
+  ]
+}

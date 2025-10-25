@@ -1,12 +1,17 @@
 [package]
 name = "leanr-rag-gateway"
+description = "Multi-lane RAG gateway with cost routing and verified safety proofs using lean-agentic"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
 repository.workspace = true
+homepage.workspace = true
+documentation = "https://docs.rs/leanr-rag-gateway"
+keywords.workspace = true
+categories.workspace = true
 
 [dependencies]
-leanr-core = { path = "../leanr-core" }
+lean-agentic = { version = "0.1.0", path = "../lean-agentic" }
 
 [dev-dependencies]

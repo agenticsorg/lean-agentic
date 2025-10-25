@@ -13,7 +13,7 @@
 //!
 //! Run: cargo run --example 04_self_healing_database
 
-use leanr_core::{Arena, Environment, SymbolTable};
+use lean_agentic::{Arena, Environment, SymbolTable};
 use runtime::{AgentId, Message, capabilities::Iso};
 use std::collections::HashMap;
 use std::time::Duration;

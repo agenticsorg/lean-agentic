@@ -19,9 +19,9 @@
 //!
 //! Build for WASM: wasm-pack build --example 05_browser_theorem_prover
 
-use leanr_core::{Arena, Environment, SymbolTable, TermId};
-use leanr_core::level::LevelArena;
-use leanr_core::term::{Binder, BinderInfo};
+use lean_agentic::{Arena, Environment, SymbolTable, TermId};
+use lean_agentic::level::LevelArena;
+use lean_agentic::term::{Binder, BinderInfo};
 use std::collections::{HashMap, VecDeque};
 use std::time::Instant;
 

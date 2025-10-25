@@ -2,7 +2,7 @@
 
 use crate::context::ElabContext;
 use crate::metavar::MetaVarContext;
-use leanr_core::{
+use lean_agentic::{
     Arena, Environment, TermId, TermKind,
     term::{Binder, BinderInfo, MetaVarId},
     symbol::SymbolId,
@@ -176,7 +176,7 @@ impl<'a> Elaborator<'a> {
             Expr::Lit(lit) => {
                 // Literals have built-in types
                 use leanr_syntax::LitKind;
-                use leanr_core::term::Literal;
+                use lean_agentic::term::Literal;
 
                 let (core_lit, ty_name) = match &lit.kind {
                     LitKind::Nat(n) => (Literal::Nat(*n), "Nat"),

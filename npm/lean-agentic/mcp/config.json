@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "lean-agentic": {
+      "command": "node",
+      "args": [
+        "/workspaces/lean-agentic/npm/lean-agentic/mcp/server.js"
+      ],
+      "description": "Lean-Agentic theorem proving and hash-consing server",
+      "capabilities": {
+        "tools": [
+          "create_identity",
+          "create_variable",
+          "demonstrate_hash_consing",
+          "benchmark_equality",
+          "get_arena_stats"
+        ],
+        "resources": [
+          "stats://arena",
+          "info://system"
+        ],
+        "prompts": [
+          "theorem_prover",
+          "type_checker"
+        ]
+      }
+    }
+  }
+}

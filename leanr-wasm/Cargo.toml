@@ -1,16 +1,21 @@
 [package]
 name = "leanr-wasm"
+description = "WebAssembly bindings for lean-agentic: hash-consed dependent types in the browser"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
 repository.workspace = true
+homepage.workspace = true
+documentation = "https://docs.rs/leanr-wasm"
+keywords.workspace = true
+categories.workspace = true
 
 [lib]
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-leanr-core = { path = "../leanr-core" }
+lean-agentic = { version = "0.1.0", path = "../lean-agentic" }
 wasm-bindgen = "0.2"
 serde = { version = "1.0", features = ["derive"] }
 serde-wasm-bindgen = "0.6"

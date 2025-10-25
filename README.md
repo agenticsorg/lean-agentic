@@ -10,15 +10,84 @@
 
 ---
 
+## 🚀 NPM Package Available!
+
+**lean-agentic is now available as an npm package with full CLI and MCP support!**
+
+```bash
+# Install globally
+npm install -g lean-agentic
+
+# Or use with npx
+npx lean-agentic --help
+```
+
+**Features:**
+- ✅ **CLI Tools**: Interactive REPL, benchmarks, theorem proving
+- ✅ **MCP Integration**: 10 tools for Claude Code (5 core + 5 AgentDB)
+- ✅ **AgentDB Integration**: Vector search, pattern learning, self-learning theorems
+- ✅ **WASM Powered**: Works in Node.js and browsers
+- ✅ **File Persistence**: Store and learn from theorems
+
+**NPM**: https://npmjs.com/package/lean-agentic
+
+---
+
 ## 🎯 Vision
 
 Build **trustworthy autonomous agents at scale** by combining three critical properties rarely seen together:
 
 - **⚡ Speed**: Sub-100ms compilation, nanosecond-scale message passing, 150x faster equality checks
 - **🛡️ Safety**: Formally verified kernels with zero runtime overhead, minimal trusted computing base
-- **🧠 Intelligence**: AI-driven optimization, cost-aware routing (40%+ savings), pattern learning
+- **🧠 Intelligence**: AI-driven optimization, cost-aware routing (40%+ savings), pattern learning, self-learning from proofs
 
 ## ✨ Key Features
+
+### 📦 NPM Package & CLI
+
+**Version**: 0.2.3 | **Size**: 88.6 KB | **Status**: Published
+
+#### Quick Start
+
+```bash
+# Interactive demo
+npx lean-agentic demo
+
+# REPL
+npx lean-agentic repl
+
+# Performance benchmarks
+npx lean-agentic bench
+
+# MCP server for Claude Code
+npx lean-agentic mcp start
+```
+
+#### AgentDB Integration (NEW!)
+
+```bash
+# Initialize self-learning database
+npx lean-agentic agentdb init
+
+# Store theorems with vector embeddings
+npx lean-agentic agentdb store
+
+# Search using semantic similarity
+npx lean-agentic agentdb search "identity function"
+
+# Learn patterns from successful proofs
+npx lean-agentic agentdb learn
+
+# View statistics
+npx lean-agentic agentdb stats
+```
+
+**Features:**
+- 🧠 **Self-Learning**: Learns from every proof stored
+- 🔍 **Vector Search**: 90% semantic similarity accuracy
+- 📊 **Pattern Recognition**: Identifies successful strategies
+- 💾 **Persistence**: JSON database with auto-save
+- 📈 **Analytics**: Success rates, confidence scores, statistics
 
 ### 🏗️ Core Language Features
 

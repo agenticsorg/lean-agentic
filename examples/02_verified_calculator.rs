@@ -11,9 +11,9 @@
 //!
 //! Run: cargo run --example 02_verified_calculator
 
-use leanr_core::{Arena, Environment, SymbolTable, TermId};
-use leanr_core::level::LevelArena;
-use leanr_core::term::{Binder, BinderInfo};
+use lean_agentic::{Arena, Environment, SymbolTable, TermId};
+use lean_agentic::level::LevelArena;
+use lean_agentic::term::{Binder, BinderInfo};
 
 /// Calculator that produces proof certificates
 struct VerifiedCalculator {

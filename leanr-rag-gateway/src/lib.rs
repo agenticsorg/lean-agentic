@@ -11,7 +11,7 @@
 //! - p99 latency: <150ms
 //! - Audit acceptance: 100%
 
-use leanr_core::{Arena, Environment, SymbolTable};
+use lean_agentic::{Arena, Environment, SymbolTable};
 use std::sync::Arc;
 use std::time::Instant;
 

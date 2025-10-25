@@ -13,7 +13,7 @@
 #![warn(missing_docs)]
 #![deny(unsafe_op_in_unsafe_fn)]
 
-use leanr_core::{Error as CoreError};
+use lean_agentic::{Error as CoreError};
 
 pub mod normalize;
 pub mod cache;
@@ -143,7 +143,7 @@ impl EvalConfig {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use leanr_core::{Arena, SymbolTable, Level};
+    use lean_agentic::{Arena, SymbolTable, Level};
 
     #[test]
     fn test_eval_config_creation() {

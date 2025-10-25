@@ -3,7 +3,7 @@
 use crate::{EvalConfig, EvalError, Result};
 use crate::cache::NormalizationCache;
 use crate::reduction::ReductionStats;
-use leanr_core::{Arena, Environment, TermId, TermKind, Context};
+use lean_agentic::{Arena, Environment, TermId, TermKind, Context};
 
 /// Configuration for normalization
 pub type NormalizeConfig = EvalConfig;
@@ -72,7 +72,10 @@ impl<'a> Normalizer<'a> {
         let term_data = self.arena.get_term(term)
             .ok_or_else(|| EvalError::InvalidReduction("Invalid term ID".to_string()))?;
 
-        match &term_data.kind {
+        // Clone the kind to avoid borrow checker issues
+        let kind = term_data.kind.clone();
+
+        match &kind {
             // Application: try beta reduction
             TermKind::App(func, arg) => {
                 self.steps_remaining -= 1;
@@ -82,7 +85,10 @@ impl<'a> Normalizer<'a> {
                 let func_data = self.arena.get_term(func_whnf)
                     .ok_or_else(|| EvalError::InvalidReduction("Invalid function term".to_string()))?;
 
-                match &func_data.kind {
+                // Clone func_data.kind to avoid borrow issues
+                let func_kind = func_data.kind.clone();
+
+                match &func_kind {
                     // Beta reduction: (λx. body) arg ~~> body[x := arg]
                     TermKind::Lam(_, body) => {
                         let substituted = self.substitute(*body, 0, *arg, ctx)?;
@@ -146,7 +152,10 @@ impl<'a> Normalizer<'a> {
         let term_data = self.arena.get_term(term)
             .ok_or_else(|| EvalError::InvalidReduction("Invalid term in substitution".to_string()))?;
 
-        match &term_data.kind {
+        // Clone the kind to avoid borrow checker issues
+        let kind = term_data.kind.clone();
+
+        match &kind {
             TermKind::Var(idx) if *idx == var_idx => Ok(replacement),
             TermKind::Var(_) => Ok(term),
 
@@ -184,7 +193,7 @@ impl<'a> Normalizer<'a> {
     }
 
     /// Shift de Bruijn indices by amount
-    fn shift(&self, term: TermId, amount: i32) -> Result<TermId> {
+    fn shift(&mut self, term: TermId, amount: i32) -> Result<TermId> {
         self.shift_above(term, 0, amount)
     }
 
@@ -193,7 +202,10 @@ impl<'a> Normalizer<'a> {
         let term_data = self.arena.get_term(term)
             .ok_or_else(|| EvalError::InvalidReduction("Invalid term in shift".to_string()))?;
 
-        match &term_data.kind {
+        // Clone the kind to avoid borrow checker issues
+        let kind = term_data.kind.clone();
+
+        match &kind {
             TermKind::Var(idx) if *idx >= cutoff => {
                 let new_idx = (*idx as i32 + amount) as u32;
                 Ok(self.arena.mk_var(new_idx))
@@ -227,7 +239,7 @@ impl<'a> Normalizer<'a> {
     }
 
     /// Instantiate universe levels in a term
-    fn instantiate_levels(&self, term: TermId, _levels: &[leanr_core::LevelId]) -> Result<TermId> {
+    fn instantiate_levels(&self, term: TermId, _levels: &[lean_agentic::LevelId]) -> Result<TermId> {
         // TODO: Implement proper level instantiation
         // For now, just return the term unchanged
         Ok(term)
@@ -257,7 +269,7 @@ impl<'a> Normalizer<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use leanr_core::{Arena, Environment, SymbolTable, Binder};
+    use lean_agentic::{Arena, Environment, SymbolTable, Binder};
 
     #[test]
     fn test_beta_reduction() {

@@ -51,3 +51,4 @@ hive-mind-prompt-*.txt
 agentdb.db-shm
 agentdb.db
 package-lock.json
+.env

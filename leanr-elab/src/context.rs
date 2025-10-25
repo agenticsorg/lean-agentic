@@ -1,6 +1,6 @@
 //! Elaboration context - tracks local bindings and their types
 
-use leanr_core::{TermId, symbol::SymbolId};
+use lean_agentic::{TermId, symbol::SymbolId};
 use std::collections::HashMap;
 
 /// Local variable binding
@@ -83,8 +83,8 @@ impl Default for ElabContext {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use leanr_core::symbol::SymbolId;
-    use leanr_core::term::TermId;
+    use lean_agentic::symbol::SymbolId;
+    use lean_agentic::term::TermId;
 
     #[test]
     fn test_context_push_pop() {

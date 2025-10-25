@@ -1,0 +1,20 @@
+[package]
+name = "lean-agentic"
+description = "Core library for Lean-Agentic: hash-consed dependent types with 150x faster equality"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation = "https://docs.rs/lean-agentic"
+keywords.workspace = true
+categories.workspace = true
+readme = "README.md"
+
+[dependencies]
+# Using std collections for maximum compatibility
+
+[features]
+default = []
+serde = []

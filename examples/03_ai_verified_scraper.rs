@@ -13,7 +13,7 @@
 //!
 //! Run: cargo run --example 03_ai_verified_scraper
 
-use leanr_core::{Arena, Environment, SymbolTable};
+use lean_agentic::{Arena, Environment, SymbolTable};
 use std::collections::HashMap;
 
 /// Web scraper with formal safety guarantees
