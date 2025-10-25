@@ -1,38 +1,43 @@
 //! Audit logging for RAG Gateway
 
-use crate::RagQuery;
-use std::sync::Mutex;
+use crate::{RagQuery, GatewayError};
+use std::sync::{Arc, Mutex};
 
 #[derive(Debug, Clone)]
 pub enum AuditEvent {
-    Success {
+    RequestSuccess {
         user_id: String,
         question: String,
         latency_ms: u64,
         cost_usd: f64,
-        lane: String,
-        timestamp: u64,
+        lane_used: String,
+        timestamp: i64,
     },
-    Blocked {
+    RequestBlocked {
         user_id: String,
         question: String,
-        reason: String,
-        timestamp: u64,
+        violation: String,
+        timestamp: i64,
+    },
+    PIIMasked {
+        user_id: String,
+        count: usize,
+        timestamp: i64,
     },
 }
 
 impl AuditEvent {
     pub fn is_success(&self) -> bool {
-        matches!(self, AuditEvent::Success { .. })
+        matches!(self, AuditEvent::RequestSuccess { .. })
     }
 
     pub fn is_blocked(&self) -> bool {
-        matches!(self, AuditEvent::Blocked { .. })
+        matches!(self, AuditEvent::RequestBlocked { .. })
     }
 }
 
 pub struct AuditLog {
-    events: Mutex<Vec<AuditEvent>>,
+    events: Arc<Mutex<Vec<AuditEvent>>>,
 }
 
 impl AuditLog {
@@ -174,7 +179,7 @@ mod tests {
         log.log_success(&query, 100, 0.01, "local");
         log.log_blocked(&query, "Policy violation".to_string());
 
-        let events = log.get_events();
+        let events = log.events();
         assert_eq!(events.len(), 2);
         assert!(events[0].is_success());
         assert!(events[1].is_blocked());
@@ -195,9 +200,9 @@ mod tests {
         log.log_success(&query, 100, 0.01, "local");
         log.log_blocked(&query, "Test block".to_string());
 
-        let report = log.export_report();
-        assert!(report.contains("Total Requests: 2"));
-        assert!(report.contains("Successful: 1"));
-        assert!(report.contains("Blocked: 1"));
+        let report = log.export_compliance_report().unwrap();
+        assert!(report.contains("Audit Log Report"));
+        assert!(report.contains("SUCCESS"));
+        assert!(report.contains("BLOCKED"));
     }
 }

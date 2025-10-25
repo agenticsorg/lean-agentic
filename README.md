@@ -6,6 +6,8 @@
 [![Rust](https://img.shields.io/badge/rust-1.90%2B-orange.svg)](https://www.rust-lang.org)
 [![WASM](https://img.shields.io/badge/wasm-ready-green.svg)](https://webassembly.org)
 
+**Developed by:** [ruv.io](https://ruv.io) | [github.com/ruvnet](https://github.com/ruvnet)
+
 ---
 
 ## 🎯 Vision

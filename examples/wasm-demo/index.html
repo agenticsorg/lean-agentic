@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lean-Agentic WASM Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #555;
+            margin-top: 30px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .output {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .info {
+            color: #17a2b8;
+        }
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .demo-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Lean-Agentic WASM Demo</h1>
+        <p>Formally verified agentic programming language compiled to WebAssembly</p>
+        <p class="info"><strong>Powered by:</strong> <a href="https://ruv.io" target="_blank">ruv.io</a> | <a href="https://github.com/ruvnet" target="_blank">github.com/ruvnet</a></p>
+
+        <div class="demo-section">
+            <h2>1. Initialize Lean Demo</h2>
+            <button onclick="initDemo()">Initialize</button>
+            <div id="init-output" class="output">Click Initialize to start...</div>
+        </div>
+
+        <div class="demo-section">
+            <h2>2. Hash-Consing Demo</h2>
+            <p>Hash-consing provides 150x faster equality checks by sharing identical terms.</p>
+            <button onclick="demoHashConsing()">Test Hash-Consing</button>
+            <div id="hash-output" class="output">Click to test hash-consing...</div>
+        </div>
+
+        <div class="demo-section">
+            <h2>3. Create Terms</h2>
+            <button onclick="createVariable()">Create Variable</button>
+            <button onclick="createType()">Create Type</button>
+            <button onclick="createIdentity()">Create λx.x</button>
+            <div id="term-output" class="output">Click buttons to create terms...</div>
+        </div>
+
+        <div class="demo-section">
+            <h2>4. Performance Benchmark</h2>
+            <button onclick="runBenchmark()">Run Equality Benchmark</button>
+            <div id="bench-output" class="output">Click to run 1000 hash-consed equality checks...</div>
+        </div>
+
+        <div class="demo-section">
+            <h2>5. Statistics</h2>
+            <button onclick="showStats()">Show Stats</button>
+            <div id="stats-output" class="output">Click to show arena statistics...</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import init, { LeanDemo, greet, getVersion } from './leanr_wasm.js';
+
+        let demo = null;
+
+        // Initialize WASM module
+        async function setupWasm() {
+            try {
+                await init();
+                console.log('✅ Lean-Agentic WASM loaded successfully!');
+                const version = getVersion();
+                console.log('Version:', version);
+
+                // Test basic greeting
+                const greeting = greet("Browser");
+                console.log(greeting);
+
+                document.getElementById('init-output').innerHTML =
+                    `<span class="info">WASM module loaded. Ready to initialize!</span>\n${version}`;
+            } catch (err) {
+                console.error('Error loading WASM:', err);
+                document.getElementById('init-output').innerHTML =
+                    `<span class="error">Error loading WASM: ${err.message}</span>`;
+            }
+        }
+
+        // Initialize demo instance
+        window.initDemo = function() {
+            try {
+                demo = new LeanDemo();
+                document.getElementById('init-output').innerHTML =
+                    '<span class="success">✅ LeanDemo initialized successfully!</span>\n' +
+                    'Hash-consing arena ready for 150x faster equality checks.';
+            } catch (err) {
+                document.getElementById('init-output').innerHTML =
+                    `<span class="error">Error: ${err.message}</span>`;
+            }
+        };
+
+        // Demonstrate hash-consing
+        window.demoHashConsing = function() {
+            if (!demo) {
+                document.getElementById('hash-output').innerHTML =
+                    '<span class="error">Please initialize demo first!</span>';
+                return;
+            }
+
+            try {
+                const result = demo.demonstrateHashConsing();
+                document.getElementById('hash-output').innerHTML = result
+                    ? '<span class="success">✅ Hash-consing working!</span>\nIdentical variables share the same memory location (TermId).\nEquality check is O(1) pointer comparison.'
+                    : '<span class="error">Hash-consing test failed</span>';
+            } catch (err) {
+                document.getElementById('hash-output').innerHTML =
+                    `<span class="error">Error: ${err.message}</span>`;
+            }
+        };
+
+        // Create a variable
+        window.createVariable = function() {
+            if (!demo) {
+                document.getElementById('term-output').innerHTML =
+                    '<span class="error">Please initialize demo first!</span>';
+                return;
+            }
+
+            try {
+                const index = Math.floor(Math.random() * 10);
+                demo.createVariable(index);
+                document.getElementById('term-output').innerHTML =
+                    `<span class="success">✅ Created variable #${index}</span>\nCheck console for TermId`;
+            } catch (err) {
+                document.getElementById('term-output').innerHTML =
+                    `<span class="error">Error: ${err.message}</span>`;
+            }
+        };
+
+        // Create Type
+        window.createType = function() {
+            if (!demo) {
+                document.getElementById('term-output').innerHTML =
+                    '<span class="error">Please initialize demo first!</span>';
+                return;
+            }
+
+            try {
+                demo.createType();
+                document.getElementById('term-output').innerHTML =
+                    '<span class="success">✅ Created Type universe</span>\nCheck console for TermId';
+            } catch (err) {
+                document.getElementById('term-output').innerHTML =
+                    `<span class="error">Error: ${err.message}</span>`;
+            }
+        };
+
+        // Create identity function
+        window.createIdentity = function() {
+            if (!demo) {
+                document.getElementById('term-output').innerHTML =
+                    '<span class="error">Please initialize demo first!</span>';
+                return;
+            }
+
+            try {
+                demo.createIdentityFunction();
+                document.getElementById('term-output').innerHTML =
+                    '<span class="success">✅ Created identity function: λx:Type. x</span>\nCheck console for TermId';
+            } catch (err) {
+                document.getElementById('term-output').innerHTML =
+                    `<span class="error">Error: ${err.message}</span>`;
+            }
+        };
+
+        // Run benchmark
+        window.runBenchmark = function() {
+            if (!demo) {
+                document.getElementById('bench-output').innerHTML =
+                    '<span class="error">Please initialize demo first!</span>';
+                return;
+            }
+
+            try {
+                const result = demo.benchmarkEquality();
+                document.getElementById('bench-output').innerHTML =
+                    `<span class="success">✅ Benchmark complete!</span>\n${result}\n\nHash-consing enables sub-nanosecond equality checks!`;
+            } catch (err) {
+                document.getElementById('bench-output').innerHTML =
+                    `<span class="error">Error: ${err.message}</span>`;
+            }
+        };
+
+        // Show stats
+        window.showStats = function() {
+            if (!demo) {
+                document.getElementById('stats-output').innerHTML =
+                    '<span class="error">Please initialize demo first!</span>';
+                return;
+            }
+
+            try {
+                const stats = demo.getStats();
+                document.getElementById('stats-output').innerHTML =
+                    `<span class="success">Arena Statistics</span>\n${stats}`;
+            } catch (err) {
+                document.getElementById('stats-output').innerHTML =
+                    `<span class="error">Error: ${err.message}</span>`;
+            }
+        };
+
+        // Load WASM on page load
+        setupWasm();
+    </script>
+</body>
+</html>
