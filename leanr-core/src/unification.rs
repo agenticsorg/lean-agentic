@@ -118,7 +118,7 @@ impl Unifier {
                     let term = self.apply_subst(arena, term)?;
                     if let Some(TermKind::Sort(_)) = arena.kind(term) {
                         // OK
-                    } else if let Some(TermKind::MVar(mvar)) = arena.kind(term) {
+                    } else if let Some(TermKind::MVar(_mvar)) = arena.kind(term) {
                         // Defer: we need more information
                         self.add_constraint(Constraint::IsSort(term));
                     } else {
@@ -161,60 +161,60 @@ impl Unifier {
 
         let kind1 = arena.kind(t1).ok_or_else(|| {
             crate::Error::Internal(format!("Invalid term ID: {:?}", t1))
-        })?;
+        })?.clone();
 
         let kind2 = arena.kind(t2).ok_or_else(|| {
             crate::Error::Internal(format!("Invalid term ID: {:?}", t2))
-        })?;
+        })?.clone();
 
         match (kind1, kind2) {
             // ?m = t  or  t = ?m
             (TermKind::MVar(m), _) => {
-                if !self.subst.is_assigned(*m) {
-                    if self.occurs_check(*m, t2, arena)? {
+                if !self.subst.is_assigned(m) {
+                    if self.occurs_check(m, t2, arena)? {
                         return Err(crate::Error::UnificationError(
                             "Occurs check failed".to_string(),
                         ));
                     }
-                    self.subst.assign(*m, t2);
+                    self.subst.assign(m, t2);
                     Ok(())
                 } else {
-                    let assigned = self.subst.lookup(*m).unwrap();
+                    let assigned = self.subst.lookup(m).unwrap();
                     self.solve_unify(arena, _env, _ctx, assigned, t2)
                 }
             }
 
             (_, TermKind::MVar(m)) => {
-                if !self.subst.is_assigned(*m) {
-                    if self.occurs_check(*m, t1, arena)? {
+                if !self.subst.is_assigned(m) {
+                    if self.occurs_check(m, t1, arena)? {
                         return Err(crate::Error::UnificationError(
                             "Occurs check failed".to_string(),
                         ));
                     }
-                    self.subst.assign(*m, t1);
+                    self.subst.assign(m, t1);
                     Ok(())
                 } else {
-                    let assigned = self.subst.lookup(*m).unwrap();
+                    let assigned = self.subst.lookup(m).unwrap();
                     self.solve_unify(arena, _env, _ctx, t1, assigned)
                 }
             }
 
             // Structural unification
             (TermKind::App(f1, a1), TermKind::App(f2, a2)) => {
-                self.solve_unify(arena, _env, _ctx, *f1, *f2)?;
-                self.solve_unify(arena, _env, _ctx, *a1, *a2)?;
+                self.solve_unify(arena, _env, _ctx, f1, f2)?;
+                self.solve_unify(arena, _env, _ctx, a1, a2)?;
                 Ok(())
             }
 
             (TermKind::Lam(b1, body1), TermKind::Lam(b2, body2)) => {
                 self.solve_unify(arena, _env, _ctx, b1.ty, b2.ty)?;
-                self.solve_unify(arena, _env, _ctx, *body1, *body2)?;
+                self.solve_unify(arena, _env, _ctx, body1, body2)?;
                 Ok(())
             }
 
             (TermKind::Pi(b1, body1), TermKind::Pi(b2, body2)) => {
                 self.solve_unify(arena, _env, _ctx, b1.ty, b2.ty)?;
-                self.solve_unify(arena, _env, _ctx, *body1, *body2)?;
+                self.solve_unify(arena, _env, _ctx, body1, body2)?;
                 Ok(())
             }
 

@@ -128,12 +128,12 @@ impl Converter {
 
         let kind = arena.kind(term).ok_or_else(|| {
             crate::Error::Internal(format!("Invalid term ID: {:?}", term))
-        })?;
+        })?.clone();
 
         let result = match kind {
             // Variables: look up in context for let-bound values
             TermKind::Var(idx) => {
-                if let Some(value) = ctx.value_of(*idx) {
+                if let Some(value) = ctx.value_of(idx) {
                     self.whnf(arena, env, ctx, value)?
                 } else {
                     term
@@ -141,8 +141,8 @@ impl Converter {
             }
 
             // Constants: unfold if reducible
-            TermKind::Const(name, levels) => {
-                if let Some(decl) = env.get_decl(*name) {
+            TermKind::Const(name, _levels) => {
+                if let Some(decl) = env.get_decl(name) {
                     if decl.is_reducible() {
                         if let Some(body) = decl.value {
                             // Instantiate universe parameters if needed
@@ -161,16 +161,16 @@ impl Converter {
 
             // Application: try beta reduction
             TermKind::App(func, arg) => {
-                let func_whnf = self.whnf(arena, env, ctx, *func)?;
+                let func_whnf = self.whnf(arena, env, ctx, func)?;
 
-                if let Some(TermKind::Lam(binder, body)) = arena.kind(func_whnf) {
+                if let Some(TermKind::Lam(_binder, body)) = arena.kind(func_whnf).cloned() {
                     // Beta reduction: (λx.body) arg ~> body[x := arg]
-                    let subst = self.substitute(arena, *body, 0, *arg)?;
+                    let subst = self.substitute(arena, body, 0, arg)?;
                     self.whnf(arena, env, ctx, subst)?
                 } else {
                     // Can't reduce further
-                    if func_whnf != *func {
-                        let new_app = arena.mk_app(func_whnf, *arg);
+                    if func_whnf != func {
+                        let new_app = arena.mk_app(func_whnf, arg);
                         self.whnf(arena, env, ctx, new_app)?
                     } else {
                         term
@@ -179,9 +179,9 @@ impl Converter {
             }
 
             // Let expression: zeta reduction
-            TermKind::Let(binder, value, body) => {
+            TermKind::Let(_binder, value, body) => {
                 // Substitute value into body
-                let subst = self.substitute(arena, *body, 0, *value)?;
+                let subst = self.substitute(arena, body, 0, value)?;
                 self.whnf(arena, env, ctx, subst)?
             }
 
@@ -216,11 +216,11 @@ impl Converter {
 
         let kind1 = arena.kind(t1).ok_or_else(|| {
             crate::Error::Internal(format!("Invalid term ID: {:?}", t1))
-        })?;
+        })?.clone();
 
         let kind2 = arena.kind(t2).ok_or_else(|| {
             crate::Error::Internal(format!("Invalid term ID: {:?}", t2))
-        })?;
+        })?.clone();
 
         match (kind1, kind2) {
             // Sorts
@@ -236,8 +236,8 @@ impl Converter {
 
             // Applications
             (TermKind::App(f1, a1), TermKind::App(f2, a2)) => {
-                let funcs_eq = self.is_def_eq(arena, env, ctx, *f1, *f2)?;
-                let args_eq = self.is_def_eq(arena, env, ctx, *a1, *a2)?;
+                let funcs_eq = self.is_def_eq(arena, env, ctx, f1, f2)?;
+                let args_eq = self.is_def_eq(arena, env, ctx, a1, a2)?;
                 Ok(funcs_eq && args_eq)
             }
 
@@ -252,7 +252,7 @@ impl Converter {
                 // Check bodies under extended context
                 let mut new_ctx = ctx.clone();
                 new_ctx.push_var(b1.name, b1.ty);
-                self.is_def_eq(arena, env, &new_ctx, *body1, *body2)
+                self.is_def_eq(arena, env, &new_ctx, body1, body2)
             }
 
             // Pi types
@@ -266,7 +266,7 @@ impl Converter {
                 // Check bodies under extended context
                 let mut new_ctx = ctx.clone();
                 new_ctx.push_var(b1.name, b1.ty);
-                self.is_def_eq(arena, env, &new_ctx, *body1, *body2)
+                self.is_def_eq(arena, env, &new_ctx, body1, body2)
             }
 
             // Literals

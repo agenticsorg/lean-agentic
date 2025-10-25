@@ -3,7 +3,6 @@
 //! Stores all top-level definitions, axioms, and inductive types
 //! using persistent data structures for efficient cloning.
 
-use crate::level::LevelId;
 use crate::symbol::SymbolId;
 use crate::term::TermId;
 use std::collections::HashMap;
