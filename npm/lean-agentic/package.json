@@ -1,7 +1,7 @@
 {
   "name": "lean-agentic",
-  "version": "0.2.3",
-  "description": "High-performance WebAssembly theorem prover with dependent types, hash-consing (150x faster), MCP support for Claude Code, AgentDB vector search, episodic memory, and ReasoningBank learning. Formal verification with AI-powered proof recommendations.",
+  "version": "0.3.0",
+  "description": "High-performance WebAssembly theorem prover with dependent types, hash-consing (150x faster), Ed25519 proof signatures, MCP support for Claude Code, AgentDB vector search, episodic memory, and ReasoningBank learning. Formal verification with cryptographic attestation and AI-powered proof recommendations.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -87,7 +87,17 @@
     "semantic-search",
     "pattern-recognition",
     "proof-recommendations",
-    "ai-learning"
+    "ai-learning",
+    "ed25519",
+    "digital-signatures",
+    "cryptographic-attestation",
+    "proof-signing",
+    "agent-identity",
+    "byzantine-consensus",
+    "tamper-detection",
+    "chain-of-custody",
+    "non-repudiation",
+    "distributed-trust"
   ],
   "author": "ruv.io",
   "contributors": [

@@ -22,7 +22,7 @@ const readline = require('readline');
 // MCP Protocol Version
 const PROTOCOL_VERSION = '2024-11-05';
 const SERVER_NAME = 'lean-agentic';
-const SERVER_VERSION = '0.2.3';
+const SERVER_VERSION = '0.3.0';
 
 /**
  * MCP Server Implementation
