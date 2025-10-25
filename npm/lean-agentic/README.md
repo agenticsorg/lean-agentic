@@ -15,31 +15,21 @@
 
 ## 🎯 What is lean-agentic?
 
-`lean-agentic` is a **high-performance WebAssembly-powered theorem prover** and **dependent type theory library** that brings formal verification to JavaScript and TypeScript. Perfect for AI-assisted development, interactive proof assistants, and type-safe programming.
+Lean-Agentic is a high-performance WebAssembly theorem prover and dependent type library that brings formal verification to JavaScript and TypeScript. Think of it as a logic calculator you can ship anywhere the web runs. It is fast, compact, and built for practical use with AI tools, teaching, and type-safe programming.
 
-### Why Use lean-agentic?
+**Built in Rust** with a clean, auditable core inspired by Lean 4's dependent type system, Lean-Agentic compiles to WebAssembly for universal JavaScript compatibility.
 
-**In Simple Terms:**
+In simple terms, Lean-Agentic helps you prove properties about your code before it runs. It checks that functions match their types, that transformations keep meaning, and that two expressions are the same. Thanks to hash-consing and smart caching, equality checks that used to take long complete up to 150 times faster. The core is small and auditable, and the package stays under 100 KB.
 
-Think of lean-agentic as a powerful calculator for logic and proofs - but it runs 150 times faster than traditional approaches and works anywhere JavaScript does. Whether you're building AI tools, verifying code correctness, or teaching computer science, lean-agentic makes formal reasoning accessible and practical.
+**For developers**, this means fewer bugs and clearer intent. You can verify algorithms, guard critical paths, and build interactive assistants that reason about program structure.
 
-**For Developers:**
-- Write mathematically provable code that can't have certain bugs
-- Check if your algorithms are logically correct before running them
-- Build smarter AI tools that can reason about code structure
-- Create interactive educational tools for teaching programming concepts
+**For AI and ML teams**, it slots into Claude Code and similar systems to validate agent output, create verified training examples, and enforce logical constraints.
 
-**For AI/ML Engineers:**
-- Integrate theorem proving into Claude Code and other AI assistants
-- Build verification layers for AI-generated code
-- Create training data from formally verified examples
-- Validate AI outputs against logical constraints
+**For educators**, it runs directly in the browser, so students can explore type theory and proofs with no setup.
 
-**For Educators:**
-- Teach type theory and formal methods in an accessible way
-- Run interactive proofs directly in the browser
-- Demonstrate concepts without complex setup
-- Make abstract computer science concepts tangible
+**Trust is first class.** Version 0.3.0 adds Ed25519 proof signing, so each proof can be tied to an agent identity and checked for authenticity. You get mathematical verification plus cryptographic attestation, with support for multi-agent consensus and tamper detection. Performance remains practical: microsecond-level key generation and signing, sub-millisecond verification, and throughput that supports real workflows.
+
+**If it runs JavaScript, Lean-Agentic runs there too:** Browser, Node, Deno, or Bun.
 
 ### Key Features
 

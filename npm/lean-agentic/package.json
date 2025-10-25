@@ -1,6 +1,6 @@
 {
   "name": "lean-agentic",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "High-performance WebAssembly theorem prover with dependent types, hash-consing (150x faster), Ed25519 proof signatures, MCP support for Claude Code, AgentDB vector search, episodic memory, and ReasoningBank learning. Formal verification with cryptographic attestation and AI-powered proof recommendations.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
