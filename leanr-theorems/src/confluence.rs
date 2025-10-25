@@ -291,7 +291,7 @@ impl ChurchRosser {
             source: source.to_string(),
             target1: target1.to_string(),
             target2: target2.to_string(),
-            join: diamond.join,
+            join: diamond.join.clone(),
             steps: vec![diamond],
         })
     }

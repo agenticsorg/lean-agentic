@@ -27,8 +27,6 @@ pub use confluence::{
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[test]
     fn confluence_module_exists() {
         // Basic sanity check
