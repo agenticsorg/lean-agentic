@@ -89,6 +89,105 @@ npx lean-agentic agentdb stats
 - 💾 **Persistence**: JSON database with auto-save
 - 📈 **Analytics**: Success rates, confidence scores, statistics
 
+#### 📋 Complete NPX Commands Reference
+
+**Core Commands:**
+```bash
+npx lean-agentic demo           # Interactive demonstration
+npx lean-agentic repl           # Interactive REPL for theorem proving
+npx lean-agentic bench          # Performance benchmarks
+npx lean-agentic --help         # Show all available commands
+npx lean-agentic --version      # Display version information
+```
+
+**AgentDB Commands:**
+```bash
+npx lean-agentic agentdb init                    # Initialize database
+npx lean-agentic agentdb store                   # Store theorem (default: identity)
+npx lean-agentic agentdb store --type <type>     # Store with specific type
+npx lean-agentic agentdb search "<query>"        # Semantic search
+npx lean-agentic agentdb search "<query>" -l 10  # Search with custom limit
+npx lean-agentic agentdb learn                   # Analyze patterns
+npx lean-agentic agentdb stats                   # View statistics
+```
+
+**MCP Server:**
+```bash
+npx lean-agentic mcp start      # Start MCP server for Claude Code
+```
+
+#### 🔌 MCP Tools Reference (10 Total)
+
+**Core Theorem Proving Tools (5):**
+
+1. **`create_identity`** - Create identity function (λx:Type. x)
+   - Returns: Term representation with TermId
+   - Use: Basic theorem construction
+
+2. **`create_variable`** - Create De Bruijn indexed variables
+   - Input: Variable index (number)
+   - Returns: Variable term with TermId
+
+3. **`demonstrate_hash_consing`** - Show hash-consing performance
+   - Returns: Performance comparison (150x faster equality)
+   - Use: Verify optimization is working
+
+4. **`benchmark_equality`** - Run equality check benchmarks
+   - Returns: Timing data for term comparisons
+   - Use: Performance validation
+
+5. **`get_arena_stats`** - Get arena allocation statistics
+   - Returns: Memory usage, allocation count, deduplication ratio
+   - Use: Memory optimization analysis
+
+**AgentDB Integration Tools (5):**
+
+6. **`agentdb_init`** - Initialize AgentDB database
+   - Input: Optional database path
+   - Returns: Initialization status
+   - Use: Setup before storing theorems
+
+7. **`agentdb_store_theorem`** - Store theorem with vector embeddings
+   - Input: Theorem object (type, statement, proof, strategy)
+   - Returns: Stored theorem with ID and embeddings
+   - Use: Persist theorems for learning
+
+8. **`agentdb_search_theorems`** - Semantic similarity search
+   - Input: Query string, limit (optional)
+   - Returns: Similar theorems with similarity scores
+   - Use: Find related theorems (90% accuracy)
+
+9. **`agentdb_learn_patterns`** - Analyze patterns with ReasoningBank
+   - Returns: Learned patterns, confidence scores, success rates
+   - Use: Identify successful proof strategies
+
+10. **`agentdb_get_stats`** - Get database statistics
+    - Returns: Total theorems, success rate, storage size, types
+    - Use: Monitor database health and growth
+
+**MCP Resources (3):**
+- `arena://stats` - Arena memory statistics
+- `system://info` - System information
+- `agentdb://status` - AgentDB connection status
+
+**MCP Prompts (2):**
+- `theorem_proving` - AI-optimized theorem proving guidance
+- `pattern_learning` - ReasoningBank learning strategies
+
+**Using MCP Tools in Claude Code:**
+
+```bash
+# Add MCP server to Claude Code
+claude mcp add lean-agentic npx lean-agentic mcp start
+
+# Tools become available automatically in Claude Code
+# Use natural language to invoke tools:
+# "Create an identity function using lean-agentic"
+# "Store this theorem in AgentDB"
+# "Search for similar theorems about identity"
+# "Show me arena statistics"
+```
+
 ### 🏗️ Core Language Features
 
 #### **Lean4-Style Dependent Type Theory**
