@@ -755,6 +755,12 @@ This project is licensed under the **Apache License 2.0** - see the [LICENSE](LI
 
 ---
 
+## 👥 Credits & Acknowledgments
+
+- **Created by**: [ruv.io](https://ruv.io) - AI infrastructure and orchestration platform
+- **Maintained by**: [github.com/ruvnet](https://github.com/ruvnet) - Open source AI tooling
+- **Powered by**: Flow Nexus cloud orchestration, AgentDB vector memory, Claude Flow swarm coordination
+
 ## 🙏 Acknowledgments
 
 ### Technologies
