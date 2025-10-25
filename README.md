@@ -792,12 +792,12 @@ cargo run --example ed25519_proof_signing
 - **[docs/README.md](docs/README.md)** - Complete documentation index
 
 ### For Users
-- **[docs/PRODUCTION_EXAMPLES.md](docs/PRODUCTION_EXAMPLES.md)** - Complete usage guide for all 5 examples
-- **[docs/RUNBOOK.md](docs/RUNBOOK.md)** - Operations procedures and troubleshooting
-- **[docs/TESTING_SUMMARY.md](docs/TESTING_SUMMARY.md)** - Test coverage and benchmarks
+- **[docs/guides/PRODUCTION_EXAMPLES.md](docs/guides/PRODUCTION_EXAMPLES.md)** - Complete usage guide for all 5 examples
+- **[docs/guides/RUNBOOK.md](docs/guides/RUNBOOK.md)** - Operations procedures and troubleshooting
+- **[docs/reports/TESTING_SUMMARY.md](docs/reports/TESTING_SUMMARY.md)** - Test coverage and benchmarks
 
 ### For Contributors
-- **[docs/SWARM_IMPLEMENTATION_COMPLETE.md](docs/SWARM_IMPLEMENTATION_COMPLETE.md)** - Complete implementation report
+- **[docs/reports/SWARM_IMPLEMENTATION_COMPLETE.md](docs/reports/SWARM_IMPLEMENTATION_COMPLETE.md)** - Complete implementation report
 - **[docs/architecture/](docs/architecture/)** - Detailed architecture docs (91KB)
   - [00-overview.md](docs/architecture/00-overview.md) - System design overview
   - [01-memory-model.md](docs/architecture/01-memory-model.md) - Hash-consing and arenas
@@ -805,11 +805,18 @@ cargo run --example ed25519_proof_signing
   - [03-performance.md](docs/architecture/03-performance.md) - Performance optimization
   - [04-integration-points.md](docs/architecture/04-integration-points.md) - Component interfaces
 
+### For Researchers
+- **[docs/theorems/](docs/theorems/)** - Novel theorem contributions (10 files)
+  - [NEW_THEOREM_ACHIEVEMENT.md](docs/theorems/NEW_THEOREM_ACHIEVEMENT.md) - Hash-Consing Confluence Preservation (October 2025)
+  - [FORMAL_PROOF_HASHCONS_CONFLUENCE.md](docs/theorems/FORMAL_PROOF_HASHCONS_CONFLUENCE.md) - Complete mathematical proof
+  - [HASH_CONSING_CONFLUENCE_THEOREM.md](docs/theorems/HASH_CONSING_CONFLUENCE_THEOREM.md) - Theorem overview
+
 ### Implementation Guides
-- **[docs/elaboration-implementation.md](docs/elaboration-implementation.md)** - Elaborator technical details
-- **[docs/WASM_COMPILER_IMPLEMENTATION.md](docs/WASM_COMPILER_IMPLEMENTATION.md)** - WASM compiler guide
-- **[docs/runtime-implementation.md](docs/runtime-implementation.md)** - Runtime internals
-- **[docs/INTEGRATION_GUIDE.md](docs/INTEGRATION_GUIDE.md)** - AI optimization integration
+- **[docs/guides/INTEGRATION_GUIDE.md](docs/guides/INTEGRATION_GUIDE.md)** - AI optimization integration
+- **[docs/guides/PRODUCTION_EXAMPLES.md](docs/guides/PRODUCTION_EXAMPLES.md)** - Production usage examples
+- **[docs/reports/elaboration-implementation.md](docs/reports/elaboration-implementation.md)** - Elaborator technical details
+- **[docs/reports/WASM_COMPILER_IMPLEMENTATION.md](docs/reports/WASM_COMPILER_IMPLEMENTATION.md)** - WASM compiler guide
+- **[docs/reports/runtime-implementation.md](docs/reports/runtime-implementation.md)** - Runtime internals
 
 ### Architecture Decisions
 - **[docs/decisions/ADR-001-hash-consing.md](docs/decisions/ADR-001-hash-consing.md)** - Hash-consing design rationale
@@ -842,7 +849,12 @@ lean-agentic/
 │   └── multi-lane/         # Cost routing (700 LOC)
 ├── examples/               # Production examples (3,100 LOC)
 ├── tests/                  # Comprehensive tests (1,700 LOC)
-├── docs/                   # Documentation (128KB)
+├── docs/                   # Documentation (~350KB)
+│   ├── theorems/          # Novel theorem contributions (10 files)
+│   ├── agentdb/           # AgentDB validation reports (5 files)
+│   ├── guides/            # Implementation guides (5 files)
+│   ├── reports/           # Status and progress reports (12 files)
+│   └── validation/        # Formal verification (2 files)
 └── Cargo.toml             # Workspace configuration
 ```
 
@@ -968,7 +980,7 @@ This project was implemented using **swarm intelligence** with 6 specialized age
 - Document public APIs
 - Update architecture docs for significant changes
 
-See [docs/SWARM_IMPLEMENTATION_COMPLETE.md](docs/SWARM_IMPLEMENTATION_COMPLETE.md) for complete development details.
+See [docs/reports/SWARM_IMPLEMENTATION_COMPLETE.md](docs/reports/SWARM_IMPLEMENTATION_COMPLETE.md) for complete development details.
 
 ---
 

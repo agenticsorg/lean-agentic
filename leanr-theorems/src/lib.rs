@@ -13,6 +13,7 @@
 //! 3. **Parametricity** - Coming soon
 
 pub mod confluence;
+pub mod hashcons_confluence;
 
 #[cfg(target_arch = "wasm32")]
 pub mod wasm;
@@ -23,6 +24,15 @@ pub use confluence::{
     ParallelReduction,
     ConfluenceProof,
     ReductionStrategy,
+};
+
+pub use hashcons_confluence::{
+    HashConsConfluenceProver,
+    HashConsConfluenceProof,
+    HashConsArena,
+    Term,
+    TermId,
+    TheoremStats,
 };
 
 #[cfg(test)]
