@@ -14,7 +14,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.1.0"
+version = "0.3.0"
 edition = "2021"
 authors = ["ruv.io", "github.com/ruvnet"]
 license = "Apache-2.0"
@@ -52,7 +52,7 @@ console_error_panic_hook = "0.1"
 
 [package]
 name = "leanr"
-description = "Lean Rust: Formally verified agentic programming language with dependent types and actor runtime"
+description = "Lean Rust: Formally verified agentic programming language with dependent types, Ed25519 proof signatures, and actor runtime"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true

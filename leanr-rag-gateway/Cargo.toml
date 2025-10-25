@@ -12,6 +12,6 @@ keywords.workspace = true
 categories.workspace = true
 
 [dependencies]
-lean-agentic = { version = "0.1.0", path = "../lean-agentic" }
+lean-agentic = { version = "0.3.0", path = "../lean-agentic" }
 
 [dev-dependencies]

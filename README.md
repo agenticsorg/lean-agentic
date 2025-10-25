@@ -1,10 +1,12 @@
 # Lean-Agentic: Formally Verified Agentic Programming Language
 
-> **A hybrid programming language combining Lean4's formal verification with blazing-fast compilation, actor-based agent orchestration, AI-driven optimization, and vector-backed agent memory.**
+> **A hybrid programming language combining Lean4's formal verification with blazing-fast compilation, Ed25519 cryptographic proof signatures, actor-based agent orchestration, AI-driven optimization, and vector-backed agent memory.**
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Rust](https://img.shields.io/badge/rust-1.90%2B-orange.svg)](https://www.rust-lang.org)
 [![WASM](https://img.shields.io/badge/wasm-ready-green.svg)](https://webassembly.org)
+[![Crate](https://img.shields.io/badge/crates.io-v0.3.0-blue.svg)](https://crates.io/crates/leanr)
+[![NPM](https://img.shields.io/badge/npm-v0.3.0-red.svg)](https://www.npmjs.com/package/lean-agentic)
 
 **Developed by:** [ruv.io](https://ruv.io) | [github.com/ruvnet](https://github.com/ruvnet)
 
@@ -35,10 +37,11 @@ npx lean-agentic --help
 
 ## 🎯 Vision
 
-Build **trustworthy autonomous agents at scale** by combining three critical properties rarely seen together:
+Build **trustworthy autonomous agents at scale** by combining four critical properties rarely seen together:
 
 - **⚡ Speed**: Sub-100ms compilation, nanosecond-scale message passing, 150x faster equality checks
 - **🛡️ Safety**: Formally verified kernels with zero runtime overhead, minimal trusted computing base
+- **🔐 Trust**: Ed25519 cryptographic proof signatures, multi-agent consensus, tamper detection, non-repudiation
 - **🧠 Intelligence**: AI-driven optimization, cost-aware routing (40%+ savings), pattern learning, self-learning from proofs
 
 ## ✨ Key Features
@@ -594,6 +597,9 @@ cargo bench --workspace
 ### Run Examples
 
 ```bash
+# Ed25519 Proof Signing (NEW in v0.3.0)
+cargo run --release --example ed25519_proof_signing
+
 # Policy-Verified RAG Gateway
 cargo run --release --example policy_verified_rag
 

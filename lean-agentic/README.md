@@ -1,6 +1,6 @@
 # lean-agentic
 
-**Hash-consed dependent types with 150x faster term equality**
+**Hash-consed dependent types with 150x faster term equality + Ed25519 proof signatures**
 
 [![Crates.io](https://img.shields.io/crates/v/lean-agentic)](https://crates.io/crates/lean-agentic)
 [![Documentation](https://docs.rs/lean-agentic/badge.svg)](https://docs.rs/lean-agentic)
@@ -17,14 +17,15 @@
 
 - **⚡ Hash-Consing**: 150x faster term equality (0.3ns vs 45ns structural comparison)
 - **🛡️ Dependent Types**: Full Lean4-style dependent type theory
+- **🔐 Ed25519 Signatures**: Cryptographic proof attestation with agent identity (v0.3.0)
 - **📦 Arena Allocation**: Zero-copy term sharing via bump allocators
 - **✅ Minimal Kernel**: <1,200 lines of trusted code
 
 Perfect for building:
-- 🔍 Theorem provers
-- ✅ Verified compilers
-- 🤖 AI agents with formal guarantees
-- 🔐 Proof-carrying code systems
+- 🔍 Theorem provers with cryptographic proof signing
+- ✅ Verified compilers with non-repudiation
+- 🤖 Multi-agent systems with Byzantine consensus
+- 🔐 Proof-carrying code with tamper detection
 
 ---
 
@@ -38,7 +39,7 @@ Or add to `Cargo.toml`:
 
 ```toml
 [dependencies]
-lean-agentic = "0.1.0"
+lean-agentic = "0.3.0"
 ```
 
 ---
@@ -256,11 +257,34 @@ impl SafeAgent {
 
 See [examples/](../examples/) for complete applications:
 
-1. **Hello World** - Hash-consing basics
-2. **Verified Calculator** - Proof certificates
-3. **AI Scraper** - AI + formal verification (NOVEL)
-4. **Self-Healing DB** - Byzantine consensus (CUTTING EDGE)
-5. **Theorem Prover** - Browser WASM (WORLD FIRST)
+1. **Ed25519 Proof Signing** - Cryptographic attestation + multi-agent consensus (NEW v0.3.0)
+2. **Hello World** - Hash-consing basics
+3. **Verified Calculator** - Proof certificates
+4. **AI Scraper** - AI + formal verification (NOVEL)
+5. **Self-Healing DB** - Byzantine consensus (CUTTING EDGE)
+6. **Theorem Prover** - Browser WASM (WORLD FIRST)
+
+### Ed25519 Proof Signing (NEW)
+
+```rust
+use lean_agentic::ed25519::AgentIdentity;
+
+// Create agent identity
+let agent = AgentIdentity::new("researcher-001".into());
+
+// Sign a proof
+let signed_proof = agent.sign_proof(proof_term, "Identity theorem", "direct");
+
+// Verify: Mathematical + Cryptographic
+let result = signed_proof.verify_full(&trusted_agents);
+assert!(result.mathematically_valid && result.cryptographically_valid);
+
+// Multi-agent consensus
+let consensus = ProofConsensus::create(signed_proof, validators, threshold)?;
+assert!(consensus.verify());
+```
+
+Run: `cargo run --example ed25519_proof_signing`
 
 ---
 
