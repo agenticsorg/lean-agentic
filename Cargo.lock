@@ -23,6 +23,13 @@ name = "leanr-inductive"
 version = "0.1.0"
 
 [[package]]
+name = "leanr-rag-gateway"
+version = "0.1.0"
+dependencies = [
+ "leanr-core",
+]
+
+[[package]]
 name = "leanr-syntax"
 version = "0.1.0"
 

@@ -7,7 +7,7 @@ members = [
     "leanr-inductive",
     "leanr-eval-lite",
     "leanr-wasm",
-    "leanr-compat",
+    "leanr-compat", "leanr-rag-gateway",
 ]
 
 [workspace.package]
