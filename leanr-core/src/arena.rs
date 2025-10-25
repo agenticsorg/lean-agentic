@@ -76,6 +76,11 @@ impl Arena {
         self.terms.get(id.raw() as usize)
     }
 
+    /// Get a term by its ID (alias for compatibility)
+    pub fn get_term(&self, id: TermId) -> Option<&Term> {
+        self.get(id)
+    }
+
     /// Get the kind of a term by its ID
     pub fn kind(&self, id: TermId) -> Option<&TermKind> {
         self.get(id).map(|t| &t.kind)
@@ -164,6 +169,12 @@ impl Arena {
     /// Create a spine of applications (f x y z)
     pub fn mk_app_spine(&mut self, func: TermId, args: &[TermId]) -> TermId {
         args.iter().fold(func, |acc, &arg| self.mk_app(acc, arg))
+    }
+
+    /// Create a zero universe level
+    pub fn mk_level_zero(&mut self) -> crate::level::LevelId {
+        // This is a placeholder - in production this would use LevelArena
+        crate::level::LevelId::new(0)
     }
 }
 

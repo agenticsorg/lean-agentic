@@ -1,14 +1,17 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+//! Syntax layer for Lean - lexing and parsing
+//!
+//! This crate handles the transformation of source text into AST,
+//! including lexing, parsing, and error recovery.
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub mod lexer;
+pub mod parser;
+pub mod ast;
+pub mod span;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+pub use lexer::{Lexer, Token, TokenKind};
+pub use parser::{Parser, ParseError};
+pub use ast::*;
+pub use span::{Span, SourceFile};
+
+/// Result type for syntax operations
+pub type Result<T> = std::result::Result<T, ParseError>;

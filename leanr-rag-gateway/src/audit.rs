@@ -1,40 +1,38 @@
-//! Audit logging for compliance and security
+//! Audit logging for RAG Gateway
 
-use crate::{GatewayError, RagQuery};
-use std::sync::{Arc, Mutex};
+use crate::RagQuery;
+use std::sync::Mutex;
 
-/// Audit event types
 #[derive(Debug, Clone)]
 pub enum AuditEvent {
-    /// Request was blocked by policy
-    RequestBlocked {
-        user_id: String,
-        question: String,
-        violation: String,
-        timestamp: i64,
-    },
-
-    /// Request succeeded
-    RequestSuccess {
+    Success {
         user_id: String,
         question: String,
         latency_ms: u64,
         cost_usd: f64,
-        lane_used: String,
-        timestamp: i64,
+        lane: String,
+        timestamp: u64,
     },
-
-    /// PII was masked in response
-    PIIMasked {
+    Blocked {
         user_id: String,
-        count: usize,
-        timestamp: i64,
+        question: String,
+        reason: String,
+        timestamp: u64,
     },
 }
 
-/// Audit log for compliance tracking
+impl AuditEvent {
+    pub fn is_success(&self) -> bool {
+        matches!(self, AuditEvent::Success { .. })
+    }
+
+    pub fn is_blocked(&self) -> bool {
+        matches!(self, AuditEvent::Blocked { .. })
+    }
+}
+
 pub struct AuditLog {
-    events: Arc<Mutex<Vec<AuditEvent>>>,
+    events: Mutex<Vec<AuditEvent>>,
 }
 
 impl AuditLog {
@@ -162,24 +160,44 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_audit_log() {
+    fn test_audit_logging() {
         let log = AuditLog::new();
 
         let query = RagQuery {
-            question: "Test question".to_string(),
+            question: "Test".to_string(),
             sources: vec![],
             user_id: "user123".to_string(),
             latency_sla: None,
             cost_budget: None,
         };
 
+        log.log_success(&query, 100, 0.01, "local");
         log.log_blocked(&query, "Policy violation".to_string());
-        assert_eq!(log.blocked_count(), 1);
 
-        log.log_success(&query, 100, 0.001, "local");
-        assert_eq!(log.success_count(), 1);
+        let events = log.get_events();
+        assert_eq!(events.len(), 2);
+        assert!(events[0].is_success());
+        assert!(events[1].is_blocked());
+    }
 
-        let report = log.export_compliance_report().unwrap();
-        assert!(report.contains("user123"));
+    #[test]
+    fn test_export_report() {
+        let log = AuditLog::new();
+
+        let query = RagQuery {
+            question: "Test".to_string(),
+            sources: vec![],
+            user_id: "user123".to_string(),
+            latency_sla: None,
+            cost_budget: None,
+        };
+
+        log.log_success(&query, 100, 0.01, "local");
+        log.log_blocked(&query, "Test block".to_string());
+
+        let report = log.export_report();
+        assert!(report.contains("Total Requests: 2"));
+        assert!(report.contains("Successful: 1"));
+        assert!(report.contains("Blocked: 1"));
     }
 }

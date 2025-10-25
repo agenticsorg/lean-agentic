@@ -7,3 +7,16 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
+leanr-core = { path = "../leanr-core" }
+hashbrown.workspace = true
+rustc-hash.workspace = true
+thiserror.workspace = true
+serde = { workspace = true, optional = true }
+
+[features]
+default = []
+serde = ["dep:serde", "leanr-core/serde"]
+deterministic = []
+
+[dev-dependencies]
+criterion = "0.5"

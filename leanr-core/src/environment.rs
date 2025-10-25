@@ -155,6 +155,11 @@ impl Declaration {
     pub fn is_reducible(&self) -> bool {
         self.attrs.reducible && self.value.is_some()
     }
+
+    /// Check if this declaration is opaque (cannot be unfolded)
+    pub fn is_opaque(&self) -> bool {
+        !self.attrs.reducible
+    }
 }
 
 /// Inductive type declaration

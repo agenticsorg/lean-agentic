@@ -1,0 +1,81 @@
+[package]
+name = "runtime"
+version = "0.1.0"
+edition = "2021"
+authors = ["Lean Rust Team"]
+license = "Apache-2.0"
+description = "Nanosecond-scale agent runtime with work-stealing scheduler and message passing"
+
+[dependencies]
+# Core async runtime
+tokio = { version = "1.35", features = ["full"] }
+futures = "0.3"
+
+# Lock-free data structures
+crossbeam = { version = "0.8", features = ["std"] }
+crossbeam-channel = "0.5"
+crossbeam-queue = "0.3"
+parking_lot = "0.12"
+
+# Random for work stealing
+rand = "0.8"
+fastrand = "2.0"
+
+# Atomics and primitives
+atomic = "0.6"
+flume = "0.11"
+
+# Hash and collections
+hashbrown = { workspace = true }
+rustc-hash = { workspace = true }
+im = { workspace = true }
+
+# Memory management
+bumpalo = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+bincode = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = "1.0"
+
+# Logging and tracing
+tracing = { workspace = true }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Time utilities
+quanta = "0.12"
+
+# SIMD optimizations (for future use)
+portable-simd = { version = "0.3", optional = true }
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports", "async_tokio"] }
+proptest = "1.4"
+tokio-test = "0.4"
+
+[features]
+default = []
+simd = ["portable-simd"]
+
+[[bench]]
+name = "scheduler"
+harness = false
+
+[[bench]]
+name = "message_passing"
+harness = false
+
+[[bench]]
+name = "orchestration"
+harness = false
+
+[[example]]
+name = "trading_swarm"
+path = "examples/trading_swarm.rs"
+
+[[example]]
+name = "quorum_consensus"
+path = "examples/quorum_consensus.rs"
