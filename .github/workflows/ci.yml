@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  npm:
+    name: npm package (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22]
+    defaults:
+      run:
+        working-directory: npm/lean-agentic
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: npm/lean-agentic/package-lock.json
+      - run: npm ci
+      - name: Build JS bundles and check dist is in sync with src
+        run: |
+          npm run build:js
+          git diff --exit-code -- dist
+      - run: npm test
+      - name: Smoke test CLI and library
+        run: |
+          timeout 60 node cli/index.js --version
+          timeout 60 node cli/index.js demo
+          timeout 60 node -e "require('./dist/node.js').createDemo().createIdentity()"
+      - name: Audit runtime dependencies
+        run: npm audit --omit=dev --audit-level=high
+      - run: npm pack --dry-run --ignore-scripts
+
+  rust:
+    name: cargo test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      # leanr-elab, leanr-eval-lite and runtime do not compile yet and are
+      # left out until they are fixed.
+      - name: cargo test (crates that compile)
+        run: >
+          cargo test --locked
+          -p lean-agentic
+          -p leanr-syntax
+          -p leanr-inductive
+          -p leanr-wasm
+          -p leanr-compat
+          -p leanr-rag-gateway
+          -p leanr-theorems

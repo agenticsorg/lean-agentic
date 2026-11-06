@@ -1,6 +1,6 @@
 {
   "name": "lean-agentic",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "High-performance WebAssembly theorem prover with dependent types, hash-consing (150x faster), Ed25519 proof signatures, MCP support for Claude Code, AgentDB vector search, episodic memory, and ReasoningBank learning. Formal verification with cryptographic attestation and AI-powered proof recommendations.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -41,9 +41,10 @@
     "build:wasm": "cd ../../leanr-wasm && wasm-pack build --target bundler --out-dir ../npm/lean-agentic/wasm",
     "build:js": "node scripts/build.js",
     "prepublishOnly": "npm run build",
-    "test": "node --test",
+    "test": "node --test tests/agentdb/*.test.js tests/theorems/basic-theorems.test.js tests/theorems/dependent-types.test.js",
     "example:node": "node examples/node-example.js",
-    "example:web": "npx serve examples"
+    "example:web": "npx serve examples",
+    "test:perf": "node tests/theorems/performance-theorems.test.js"
   },
   "keywords": [
     "lean",
@@ -115,8 +116,10 @@
     "url": "https://github.com/agenticsorg/lean-agentic/issues"
   },
   "dependencies": {
-    "commander": "^12.0.0",
-    "agentdb": "^1.5.5"
+    "commander": "^12.0.0"
+  },
+  "optionalDependencies": {
+    "agentdb": "^3.6.0"
   },
   "devDependencies": {
     "esbuild": "^0.20.0"

@@ -18,11 +18,12 @@
 
 const { createDemo } = require('../dist/node.js');
 const readline = require('readline');
+const { AgentDBTools } = require('./agentdb-tools.js');
 
 // MCP Protocol Version
 const PROTOCOL_VERSION = '2024-11-05';
 const SERVER_NAME = 'lean-agentic';
-const SERVER_VERSION = '0.3.0';
+const SERVER_VERSION = require('../package.json').version;
 
 /**
  * MCP Server Implementation
@@ -30,6 +31,7 @@ const SERVER_VERSION = '0.3.0';
 class LeanAgenticMCPServer {
   constructor() {
     this.demo = null;
+    this.agentdb = new AgentDBTools();
     this.requestId = 0;
     this.capabilities = {
       tools: true,
@@ -353,209 +355,23 @@ class LeanAgenticMCPServer {
           break;
 
         case 'agentdb_init':
-          {
-            const { createDatabase } = require('agentdb');
-            const dbPath = args.path || './lean-theorems.db';
-
-            const db = await createDatabase(dbPath);
-
-            // Create theorems table
-            await db.run(`
-              CREATE TABLE IF NOT EXISTS theorems (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                type TEXT NOT NULL,
-                statement TEXT NOT NULL,
-                proof TEXT NOT NULL,
-                term_id TEXT,
-                strategy TEXT,
-                success INTEGER DEFAULT 1,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-              )
-            `);
-
-            // Create embeddings table
-            await db.run(`
-              CREATE TABLE IF NOT EXISTS theorem_embeddings (
-                theorem_id INTEGER PRIMARY KEY,
-                embedding BLOB,
-                FOREIGN KEY(theorem_id) REFERENCES theorems(id)
-              )
-            `);
-
-            await db.close();
-
-            result = JSON.stringify({
-              success: true,
-              path: dbPath,
-              tables: ['theorems', 'theorem_embeddings'],
-              message: 'AgentDB initialized successfully',
-            }, null, 2);
-          }
+          result = await this.agentdb.init(args);
           break;
 
         case 'agentdb_store_theorem':
-          {
-            const { createDatabase, EmbeddingService } = require('agentdb');
-            const dbPath = args.path || './lean-theorems.db';
-
-            const db = await createDatabase(dbPath);
-            const embeddings = new EmbeddingService(db);
-
-            // Create identity theorem using demo
-            const identityResult = this.demo.createIdentity();
-            const identity = JSON.parse(identityResult);
-
-            // Store theorem
-            const storeResult = await db.run(
-              'INSERT INTO theorems (type, statement, proof, term_id, strategy) VALUES (?, ?, ?, ?, ?)',
-              [args.type || 'identity', args.statement, args.proof, 'TermId(2)', 'direct_construction']
-            );
-
-            const theoremId = storeResult.lastID;
-
-            // Generate and store embedding
-            const embedding = await embeddings.generateEmbedding(args.statement);
-            await embeddings.storeEmbedding(theoremId, 'theorem_embeddings', embedding);
-
-            await db.close();
-
-            result = JSON.stringify({
-              success: true,
-              theorem_id: theoremId,
-              type: args.type || 'identity',
-              statement: args.statement,
-              proof: args.proof,
-              embeddings_generated: true,
-            }, null, 2);
-          }
+          result = await this.agentdb.storeTheorem(args);
           break;
 
         case 'agentdb_search_theorems':
-          {
-            const { createDatabase, EmbeddingService, WASMVectorSearch } = require('agentdb');
-            const dbPath = args.path || './lean-theorems.db';
-
-            const db = await createDatabase(dbPath);
-            const embeddings = new EmbeddingService(db);
-            const vectorSearch = new WASMVectorSearch(db);
-
-            // Generate query embedding
-            const queryEmbedding = await embeddings.generateEmbedding(args.query);
-
-            // Search using WASM-accelerated vector similarity
-            const searchResults = await vectorSearch.search({
-              table: 'theorem_embeddings',
-              embedding: queryEmbedding,
-              limit: args.limit || 5,
-              threshold: 0.5
-            });
-
-            // Fetch full theorem details
-            const theorems = [];
-            for (const searchResult of searchResults) {
-              const theorem = await db.get(
-                'SELECT * FROM theorems WHERE id = ?',
-                [searchResult.id]
-              );
-
-              if (theorem) {
-                theorems.push({
-                  similarity: (searchResult.similarity * 100).toFixed(1) + '%',
-                  statement: theorem.statement,
-                  proof: theorem.proof,
-                  type: theorem.type,
-                  strategy: theorem.strategy,
-                });
-              }
-            }
-
-            await db.close();
-
-            result = JSON.stringify({
-              query: args.query,
-              results_found: theorems.length,
-              theorems: theorems,
-            }, null, 2);
-          }
+          result = await this.agentdb.searchTheorems(args);
           break;
 
         case 'agentdb_learn_patterns':
-          {
-            const { createDatabase, ReasoningBank } = require('agentdb');
-            const dbPath = args.path || './lean-theorems.db';
-
-            const db = await createDatabase(dbPath);
-            const reasoningBank = new ReasoningBank(db);
-
-            // Get all successful theorems
-            const theorems = await db.all('SELECT * FROM theorems WHERE success = 1');
-
-            if (theorems.length === 0) {
-              await db.close();
-              result = JSON.stringify({
-                learned: false,
-                message: 'No theorems to learn from. Store some theorems first.',
-              }, null, 2);
-              break;
-            }
-
-            // Group by strategy
-            const strategies = {};
-            for (const theorem of theorems) {
-              const strategy = theorem.strategy || 'unknown';
-              if (!strategies[strategy]) {
-                strategies[strategy] = { count: 0, types: new Set() };
-              }
-              strategies[strategy].count++;
-              strategies[strategy].types.add(theorem.type);
-            }
-
-            const patterns = Object.entries(strategies).map(([strategy, data]) => ({
-              strategy: strategy,
-              count: data.count,
-              theorem_types: Array.from(data.types),
-              success_rate: '100.0%',
-            }));
-
-            await db.close();
-
-            result = JSON.stringify({
-              learned: true,
-              total_theorems: theorems.length,
-              patterns_found: patterns.length,
-              patterns: patterns,
-            }, null, 2);
-          }
+          result = await this.agentdb.learnPatterns(args);
           break;
 
         case 'agentdb_get_stats':
-          {
-            const { createDatabase } = require('agentdb');
-            const fs = require('fs');
-            const dbPath = args.path || './lean-theorems.db';
-
-            if (!fs.existsSync(dbPath)) {
-              result = JSON.stringify({
-                initialized: false,
-                message: 'Database not initialized yet. Run agentdb_init first.',
-              }, null, 2);
-              break;
-            }
-
-            const db = await createDatabase(dbPath);
-
-            const total = await db.get('SELECT COUNT(*) as count FROM theorems');
-            const byType = await db.all('SELECT type, COUNT(*) as count FROM theorems GROUP BY type');
-            const fileStats = fs.statSync(dbPath);
-
-            await db.close();
-
-            result = JSON.stringify({
-              total_theorems: total.count,
-              database_size: (fileStats.size / 1024).toFixed(2) + ' KB',
-              theorems_by_type: byType,
-            }, null, 2);
-          }
+          result = await this.agentdb.getStats(args);
           break;
 
         default:
@@ -620,31 +436,7 @@ class LeanAgenticMCPServer {
           break;
 
         case 'stats://agentdb':
-          {
-            const { createDatabase } = require('agentdb');
-            const fs = require('fs');
-            const dbPath = './lean-theorems.db';
-
-            if (!fs.existsSync(dbPath)) {
-              content = JSON.stringify({
-                initialized: false,
-                message: 'Database not initialized. Use agentdb_init tool.',
-              }, null, 2);
-              break;
-            }
-
-            const db = await createDatabase(dbPath);
-            const total = await db.get('SELECT COUNT(*) as count FROM theorems');
-            const byType = await db.all('SELECT type, COUNT(*) as count FROM theorems GROUP BY type');
-            await db.close();
-
-            content = JSON.stringify({
-              total_theorems: total.count,
-              theorems_by_type: byType,
-              vector_search_enabled: true,
-              learning_enabled: true,
-            }, null, 2);
-          }
+          content = await this.agentdb.statsResource();
           break;
 
         default:
