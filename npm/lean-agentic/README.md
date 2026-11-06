@@ -549,7 +549,11 @@ demo.createApplication();
 demo.demonstrateHashConsing();
 ```
 
-### Bundler API
+### Root entry point (Node.js)
+
+The root entry point is the Node.js build (same API as `lean-agentic/node`, plus `init()`). In the browser, use `lean-agentic/web`.
+
+The WASM module is silent by default. Set `LEAN_AGENTIC_DEBUG=1` (or call `setDebug(true)`) to print its diagnostic logs; they go to stderr, so they never mix with the MCP server's JSON-RPC on stdout.
 
 ```javascript
 import { init, createDemo } from 'lean-agentic';
@@ -610,11 +614,9 @@ console.timeEnd('Hash-consed equality');
 
 | Platform | Support | Import |
 |----------|---------|--------|
-| Node.js 18+ | ✅ | `lean-agentic/node` |
+| Node.js 18+ | ✅ | `lean-agentic` or `lean-agentic/node` |
 | Browser (ESM) | ✅ | `lean-agentic/web` |
-| Webpack | ✅ | `lean-agentic` |
-| Vite | ✅ | `lean-agentic` |
-| Rollup | ✅ | `lean-agentic` |
+| Webpack / Vite / Rollup (browser) | ✅ | `lean-agentic/web` |
 | Deno | ✅ | `npm:lean-agentic` |
 | Bun | ✅ | `lean-agentic` |
 
@@ -671,7 +673,6 @@ cd lean-agentic
 cd leanr-wasm
 wasm-pack build --target nodejs --out-dir ../npm/lean-agentic/wasm-node
 wasm-pack build --target web --out-dir ../npm/lean-agentic/wasm-web
-wasm-pack build --target bundler --out-dir ../npm/lean-agentic/wasm
 
 # Install dependencies
 cd ../npm/lean-agentic

@@ -39,7 +39,11 @@ jobs:
           timeout 60 node -e "require('./dist/node.js').createDemo().createIdentity()"
       - name: Audit runtime dependencies
         run: npm audit --omit=dev --audit-level=high
-      - run: npm pack --dry-run --ignore-scripts
+      - name: Pack, install the tarball into a temp project, check every entry point and MCP stdio
+        run: |
+          npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP"
+          version=$(node -p "require('./package.json').version")
+          timeout 600 node scripts/check-package.mjs "$RUNNER_TEMP/lean-agentic-$version.tgz"
 
   rust:
     name: cargo test

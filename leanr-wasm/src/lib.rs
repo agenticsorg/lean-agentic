@@ -7,7 +7,25 @@ use lean_agentic::{Arena, Environment, SymbolTable};
 use lean_agentic::level::LevelArena;
 use lean_agentic::term::{Binder, BinderInfo};
 use wasm_bindgen::prelude::*;
+use std::sync::atomic::{AtomicBool, Ordering};
 use web_sys::console;
+
+/// Diagnostic logging is off by default. When on, it goes to `console.error`
+/// (stderr under Node), so it never mixes with stdout, which the MCP server
+/// uses for JSON-RPC.
+static DEBUG: AtomicBool = AtomicBool::new(false);
+
+fn debug_log(msg: &str) {
+    if DEBUG.load(Ordering::Relaxed) {
+        console::error_1(&msg.into());
+    }
+}
+
+/// Turn diagnostic logging on or off (off by default).
+#[wasm_bindgen(js_name = setDebug)]
+pub fn set_debug(enabled: bool) {
+    DEBUG.store(enabled, Ordering::Relaxed);
+}
 
 /// Demo struct showing hash-consing performance in WASM
 #[wasm_bindgen]
@@ -24,7 +42,7 @@ impl LeanDemo {
     /// Create a new Lean demo instance
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
-        console::log_1(&"Initializing Lean-Agentic WASM...".into());
+        debug_log("Initializing Lean-Agentic WASM...");
 
         Self {
             arena: Arena::new(),
@@ -41,7 +59,7 @@ impl LeanDemo {
     pub fn create_variable(&mut self, index: u32) -> bool {
         let term = self.arena.mk_var(index);
         self.term_counter += 1;
-        console::log_1(&format!("Created variable with index {} -> TermId {:?}", index, term).into());
+        debug_log(&format!("Created variable with index {} -> TermId {:?}", index, term));
         true
     }
 
@@ -54,10 +72,10 @@ impl LeanDemo {
 
         let same = var1 == var2;
 
-        console::log_1(&format!(
+        debug_log(&format!(
             "Hash-consing test: var1={:?}, var2={:?}, same={}",
             var1, var2, same
-        ).into());
+        ));
 
         same
     }
@@ -77,7 +95,7 @@ impl LeanDemo {
         let level_zero = self.levels.zero();
         let type_term = self.arena.mk_sort(level_zero);
         self.term_counter += 1;
-        console::log_1(&format!("Created Type: {:?}", type_term).into());
+        debug_log(&format!("Created Type: {:?}", type_term));
         true
     }
 
@@ -100,7 +118,7 @@ impl LeanDemo {
         let lambda = self.arena.mk_lam(binder, var_x);
 
         self.term_counter += 3;
-        console::log_1(&format!("Created identity function: λx:Type. x = {:?}", lambda).into());
+        debug_log(&format!("Created identity function: λx:Type. x = {:?}", lambda));
         true
     }
 

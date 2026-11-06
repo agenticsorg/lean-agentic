@@ -1,6 +1,6 @@
 {
   "name": "lean-agentic",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "High-performance WebAssembly theorem prover with dependent types, hash-consing (150x faster), Ed25519 proof signatures, MCP support for Claude Code, AgentDB vector search, episodic memory, and ReasoningBank learning. Formal verification with cryptographic attestation and AI-powered proof recommendations.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -14,21 +14,21 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
-    "./web": {
-      "types": "./dist/web.d.ts",
-      "import": "./dist/web.mjs"
-    },
     "./node": {
       "types": "./dist/node.d.ts",
       "import": "./dist/node.mjs",
       "require": "./dist/node.js"
-    }
+    },
+    "./web": {
+      "types": "./dist/web.d.ts",
+      "import": "./dist/web.mjs"
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",
     "cli",
     "src",
-    "wasm",
     "wasm-node",
     "wasm-web",
     "mcp",
@@ -38,9 +38,9 @@
   ],
   "scripts": {
     "build": "npm run build:wasm && npm run build:js",
-    "build:wasm": "cd ../../leanr-wasm && wasm-pack build --target bundler --out-dir ../npm/lean-agentic/wasm",
+    "build:wasm": "cd ../../leanr-wasm && wasm-pack build --release --target nodejs --out-dir ../npm/lean-agentic/wasm-node && wasm-pack build --release --target web --out-dir ../npm/lean-agentic/wasm-web && rm -f ../npm/lean-agentic/wasm-node/.gitignore ../npm/lean-agentic/wasm-web/.gitignore",
     "build:js": "node scripts/build.js",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run build:js",
     "test": "node --test tests/agentdb/*.test.js tests/theorems/basic-theorems.test.js tests/theorems/dependent-types.test.js",
     "example:node": "node examples/node-example.js",
     "example:web": "npx serve examples",
