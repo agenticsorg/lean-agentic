@@ -21,23 +21,39 @@ export class LeanDemo {
   createIdentity(): string;
   createApplication(): string;
   demonstrateHashConsing(): string;
+  getStats(): string;
+  benchmarkEquality(): string;
 }
 
 export function createDemo(): LeanDemo;
 
-export namespace wasm {
-  export class LeanDemo {
-    constructor();
-    create_identity(): string;
-    create_application(): string;
-    demonstrate_hash_consing(): string;
-  }
-}
+/**
+ * Turn the WASM module's diagnostic logging (console.error) on or off.
+ * Off by default. Call after initWeb().
+ */
+export function setDebug(enabled: boolean): void;
+
+/** Raw wasm-bindgen module (types: wasm-web/leanr_wasm.d.ts) */
+export const wasm: {
+  LeanDemo: new () => {
+    free(): void;
+    createVariable(index: number): boolean;
+    demonstrateHashConsing(): boolean;
+    getStats(): string;
+    createType(): boolean;
+    createIdentityFunction(): boolean;
+    benchmarkEquality(): string;
+  };
+  greet(name: string): string;
+  getVersion(): string;
+  setDebug(enabled: boolean): void;
+};
 
 declare const _default: {
   initWeb: typeof initWeb;
   LeanDemo: typeof LeanDemo;
   createDemo: typeof createDemo;
+  setDebug: typeof setDebug;
   wasm: typeof wasm;
 };
 

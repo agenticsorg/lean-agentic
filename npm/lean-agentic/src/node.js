@@ -9,6 +9,19 @@
 const wasm = require('../wasm-node/leanr_wasm.js');
 
 /**
+ * Turn the WASM module's diagnostic logging on or off. Logs go to stderr
+ * (console.error), never stdout. Off by default; set LEAN_AGENTIC_DEBUG=1
+ * to turn it on at load time.
+ * @param {boolean} enabled
+ */
+function setDebug(enabled) {
+  wasm.setDebug(Boolean(enabled));
+}
+
+const debugEnv = process.env.LEAN_AGENTIC_DEBUG;
+setDebug(debugEnv !== undefined && debugEnv !== '' && debugEnv !== '0' && debugEnv !== 'false');
+
+/**
  * LeanDemo - Node.js interface
  */
 class LeanDemo {
@@ -78,5 +91,6 @@ module.exports = {
   LeanDemo,
   createDemo,
   quickStart,
+  setDebug,
   wasm
 };

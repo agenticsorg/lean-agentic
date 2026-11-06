@@ -87,6 +87,15 @@ export class LeanDemo {
   }
 }
 
+/**
+ * Turn the WASM module's diagnostic logging (console.error) on or off.
+ * Off by default. Call after initWeb().
+ * @param {boolean} enabled
+ */
+export function setDebug(enabled) {
+  wasm.setDebug(Boolean(enabled));
+}
+
 export function createDemo() {
   return new LeanDemo();
 }
@@ -95,5 +104,6 @@ export default {
   initWeb,
   LeanDemo,
   createDemo,
+  setDebug,
   wasm
 };

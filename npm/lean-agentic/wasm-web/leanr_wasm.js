@@ -29,6 +29,13 @@ function getStringFromWasm0(ptr, len) {
     ptr = ptr >>> 0;
     return decodeText(ptr, len);
 }
+/**
+ * Turn diagnostic logging on or off (off by default).
+ * @param {boolean} enabled
+ */
+export function setDebug(enabled) {
+    wasm.setDebug(enabled);
+}
 
 let WASM_VECTOR_LEN = 0;
 
@@ -140,13 +147,12 @@ export class LeanDemo {
         wasm.__wbg_leandemo_free(ptr, 0);
     }
     /**
-     * Create a new Lean demo instance
+     * Create a simple type (Type universe)
+     * @returns {boolean}
      */
-    constructor() {
-        const ret = wasm.leandemo_new();
-        this.__wbg_ptr = ret >>> 0;
-        LeanDemoFinalization.register(this, this.__wbg_ptr, this);
-        return this;
+    createType() {
+        const ret = wasm.leandemo_createType(this.__wbg_ptr);
+        return ret !== 0;
     }
     /**
      * Demonstrate hash-consing: creating same term twice reuses memory
@@ -159,37 +165,20 @@ export class LeanDemo {
         return ret !== 0;
     }
     /**
-     * Create two identical variables and verify they share the same ID
-     * Returns true if hash-consing worked (same IDs)
-     * @returns {boolean}
-     */
-    demonstrateHashConsing() {
-        const ret = wasm.leandemo_demonstrateHashConsing(this.__wbg_ptr);
-        return ret !== 0;
-    }
-    /**
-     * Get statistics about the arena (number of unique terms)
+     * Verify that hash-consing provides O(1) equality
      * @returns {string}
      */
-    getStats() {
+    benchmarkEquality() {
         let deferred1_0;
         let deferred1_1;
         try {
-            const ret = wasm.leandemo_getStats(this.__wbg_ptr);
+            const ret = wasm.leandemo_benchmarkEquality(this.__wbg_ptr);
             deferred1_0 = ret[0];
             deferred1_1 = ret[1];
             return getStringFromWasm0(ret[0], ret[1]);
         } finally {
             wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
         }
-    }
-    /**
-     * Create a simple type (Type universe)
-     * @returns {boolean}
-     */
-    createType() {
-        const ret = wasm.leandemo_createType(this.__wbg_ptr);
-        return ret !== 0;
     }
     /**
      * Create a lambda abstraction (x : Type) => x
@@ -200,14 +189,32 @@ export class LeanDemo {
         return ret !== 0;
     }
     /**
-     * Verify that hash-consing provides O(1) equality
+     * Create two identical variables and verify they share the same ID
+     * Returns true if hash-consing worked (same IDs)
+     * @returns {boolean}
+     */
+    demonstrateHashConsing() {
+        const ret = wasm.leandemo_demonstrateHashConsing(this.__wbg_ptr);
+        return ret !== 0;
+    }
+    /**
+     * Create a new Lean demo instance
+     */
+    constructor() {
+        const ret = wasm.leandemo_new();
+        this.__wbg_ptr = ret >>> 0;
+        LeanDemoFinalization.register(this, this.__wbg_ptr, this);
+        return this;
+    }
+    /**
+     * Get statistics about the arena (number of unique terms)
      * @returns {string}
      */
-    benchmarkEquality() {
+    getStats() {
         let deferred1_0;
         let deferred1_1;
         try {
-            const ret = wasm.leandemo_benchmarkEquality(this.__wbg_ptr);
+            const ret = wasm.leandemo_getStats(this.__wbg_ptr);
             deferred1_0 = ret[0];
             deferred1_1 = ret[1];
             return getStringFromWasm0(ret[0], ret[1]);
@@ -256,8 +263,8 @@ async function __wbg_load(module, imports) {
 function __wbg_get_imports() {
     const imports = {};
     imports.wbg = {};
-    imports.wbg.__wbg_log_6c7b5f4f00b8ce3f = function(arg0) {
-        console.log(arg0);
+    imports.wbg.__wbg_error_99981e16d476aa5c = function(arg0) {
+        console.error(arg0);
     };
     imports.wbg.__wbg_wbindgenthrow_451ec1a8469d7eb6 = function(arg0, arg1) {
         throw new Error(getStringFromWasm0(arg0, arg1));

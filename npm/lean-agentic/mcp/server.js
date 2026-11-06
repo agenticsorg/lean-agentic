@@ -525,6 +525,11 @@ class LeanAgenticMCPServer {
       return;
     }
 
+    // Notifications (e.g. notifications/initialized) get no response.
+    if (id === undefined && typeof method === 'string' && method.startsWith('notifications/')) {
+      return;
+    }
+
     this.log(`Handling ${method} request`);
 
     switch (method) {
@@ -565,6 +570,13 @@ class LeanAgenticMCPServer {
    * Start the stdio server
    */
   async start() {
+    // stdout carries JSON-RPC only. Send anything that calls console.log,
+    // console.info or console.debug (dependencies included) to stderr.
+    const toStderr = (...args) => console.error(...args);
+    console.log = toStderr;
+    console.info = toStderr;
+    console.debug = toStderr;
+
     await this.initialize();
 
     const rl = readline.createInterface({
@@ -594,13 +606,20 @@ class LeanAgenticMCPServer {
   }
 }
 
+/**
+ * Start the stdio server in this process.
+ */
+function startServer() {
+  const server = new LeanAgenticMCPServer();
+  return server.start();
+}
+
 // Start the server
 if (require.main === module) {
-  const server = new LeanAgenticMCPServer();
-  server.start().catch((error) => {
+  startServer().catch((error) => {
     process.stderr.write(`Fatal error: ${error}\n`);
     process.exit(1);
   });
 }
 
-module.exports = { LeanAgenticMCPServer };
+module.exports = { LeanAgenticMCPServer, startServer };

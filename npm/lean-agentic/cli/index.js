@@ -164,9 +164,13 @@ mcp
     console.error('Tools: 5 | Resources: 2 | Prompts: 2');
     console.error('Ready for Claude Code integration\n');
 
-    // Launch the MCP server
+    // Launch the MCP server. Requiring server.js alone does not start it
+    // (it only auto-starts when run directly), so call startServer().
     const serverPath = join(__dirname, '../mcp/server.js');
-    require(serverPath);
+    require(serverPath).startServer().catch((error) => {
+      process.stderr.write(`Fatal error: ${error}\n`);
+      process.exit(1);
+    });
   });
 
 mcp

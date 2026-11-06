@@ -1,6 +1,10 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
+ * Turn diagnostic logging on or off (off by default).
+ */
+export function setDebug(enabled: boolean): void;
+/**
  * Simple greeting function for testing WASM works
  */
 export function greet(name: string): string;
@@ -15,35 +19,35 @@ export class LeanDemo {
   free(): void;
   [Symbol.dispose](): void;
   /**
-   * Create a new Lean demo instance
+   * Create a simple type (Type universe)
    */
-  constructor();
+  createType(): boolean;
   /**
    * Demonstrate hash-consing: creating same term twice reuses memory
    * Returns true if successful
    */
   createVariable(index: number): boolean;
   /**
-   * Create two identical variables and verify they share the same ID
-   * Returns true if hash-consing worked (same IDs)
+   * Verify that hash-consing provides O(1) equality
    */
-  demonstrateHashConsing(): boolean;
-  /**
-   * Get statistics about the arena (number of unique terms)
-   */
-  getStats(): string;
-  /**
-   * Create a simple type (Type universe)
-   */
-  createType(): boolean;
+  benchmarkEquality(): string;
   /**
    * Create a lambda abstraction (x : Type) => x
    */
   createIdentityFunction(): boolean;
   /**
-   * Verify that hash-consing provides O(1) equality
+   * Create two identical variables and verify they share the same ID
+   * Returns true if hash-consing worked (same IDs)
    */
-  benchmarkEquality(): string;
+  demonstrateHashConsing(): boolean;
+  /**
+   * Create a new Lean demo instance
+   */
+  constructor();
+  /**
+   * Get statistics about the arena (number of unique terms)
+   */
+  getStats(): string;
 }
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
@@ -51,19 +55,20 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly __wbg_leandemo_free: (a: number, b: number) => void;
-  readonly leandemo_new: () => number;
+  readonly getVersion: () => [number, number];
+  readonly greet: (a: number, b: number) => [number, number];
+  readonly leandemo_benchmarkEquality: (a: number) => [number, number];
+  readonly leandemo_createIdentityFunction: (a: number) => number;
+  readonly leandemo_createType: (a: number) => number;
   readonly leandemo_createVariable: (a: number, b: number) => number;
   readonly leandemo_demonstrateHashConsing: (a: number) => number;
   readonly leandemo_getStats: (a: number) => [number, number];
-  readonly leandemo_createType: (a: number) => number;
-  readonly leandemo_createIdentityFunction: (a: number) => number;
-  readonly leandemo_benchmarkEquality: (a: number) => [number, number];
-  readonly greet: (a: number, b: number) => [number, number];
-  readonly getVersion: () => [number, number];
+  readonly leandemo_new: () => number;
+  readonly setDebug: (a: number) => void;
   readonly __wbindgen_export_0: WebAssembly.Table;
-  readonly __wbindgen_free: (a: number, b: number, c: number) => void;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
+  readonly __wbindgen_free: (a: number, b: number, c: number) => void;
   readonly __wbindgen_start: () => void;
 }
 
